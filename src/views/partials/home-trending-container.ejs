@@ -1,0 +1,14 @@
+<!-- Products grid (Trending products)-->
+<section class="container pt-md-3 pb-5 mb-md-3">
+  <h2 class="h3 text-center">Trending products</h2>
+  <div class="row pt-4 mx-n2">
+    <!-- Product-->
+    <% products.forEach(function(product) { %> <%-
+    include('home-trending-product', {product: product}) %> <% }); %>
+  </div>
+  <div class="text-center pt-3">
+    <a class="btn btn-outline-accent" href="/products"
+      >More products<i class="ci-arrow-right ms-1"></i
+    ></a>
+  </div>
+</section>

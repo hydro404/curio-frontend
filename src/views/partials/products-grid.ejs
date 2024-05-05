@@ -1,0 +1,42 @@
+<!-- Products grid-->
+<div class="row pt-3 mx-n2">
+  <% paginatedProducts.forEach(function(product) { %> <%-
+  include('products-container', {product: product}) %> <% }); %>
+</div>
+<hr class="my-3" />
+<!-- Pagination-->
+<nav class="d-flex justify-content-between pt-2" aria-label="Page navigation">
+  <ul class="pagination">
+    <% if (page > 1) { %>
+    <li class="page-item">
+      <a class="page-link" href="/products?page=<%= page - 1 %>"
+        ><i class="ci-arrow-left me-2"></i>Prev</a
+      >
+    </li>
+    <% } %>
+  </ul>
+  <ul class="pagination">
+    <li class="page-item d-sm-none">
+      <span class="page-link page-link-static"
+        ><%= page %> / <%= totalPages %></span
+      >
+    </li>
+    <% for (let i = 1; i <= totalPages; i++) { %>
+    <li class="page-item <%= page === i ? 'active' : '' %>">
+      <a class="page-link" href="/products?page=<%= i %>"><%= i %></a>
+    </li>
+    <% } %>
+  </ul>
+  <ul class="pagination">
+    <% if (page < totalPages) { %>
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="/products?page=<%= page + 1 %>"
+        aria-label="Next"
+        >Next<i class="ci-arrow-right ms-2"></i
+      ></a>
+    </li>
+    <% } %>
+  </ul>
+</nav>

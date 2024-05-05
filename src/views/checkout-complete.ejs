@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%- title %></title>
+    <link rel="stylesheet" href="/css/theme.min.css" />
+    <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
+    <link
+      rel="stylesheet"
+      media="screen"
+      href="/vendor/simplebar/dist/simplebar.min.css"
+    />
+    <link
+      rel="stylesheet"
+      media="screen"
+      href="/vendor/tiny-slider/dist/tiny-slider.css"
+    />
+  </head>
+  <body class="handheld-toolbar-enabled">
+    <%- include('partials/sign-in-modal') %>
+    <main class="page-wrapper">
+      <header class="shadow-sm"><%-include('partials/header') %></header>
+      <div class="container pb-5 mb-sm-4">
+        <div class="pt-5">
+          <div class="card py-3 mt-sm-3">
+            <div class="card-body text-center">
+              <h2 class="h4 pb-3">Thank you for your order!</h2>
+              <p class="fs-sm mb-2">
+                Your order has been placed and will be processed as soon as
+                possible.
+              </p>
+              <p class="fs-sm mb-2">
+                Make sure you make note of your order number, which is
+                <span class="fw-medium">ORD001.</span>
+              </p>
+              <p class="fs-sm">
+                You will be receiving an email shortly with confirmation of your
+                order. <u>You can now:</u>
+              </p>
+              <a class="btn btn-secondary mt-3 me-3" href="/products"
+                >Go back shopping</a
+              ><a class="btn btn-primary mt-3" href="/account-orders"
+                ><i class="ci-location"></i>&nbsp;Track order</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <%- include('partials/footer', {categories: categories, totalProducts:
+      totalProducts}) %>
+    </footer>
+    <!-- Back To Top Button--><a class="btn-scroll-top" href="#top" data-scroll
+      ><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span
+      ><i class="btn-scroll-top-icon ci-arrow-up"> </i
+    ></a>
+    <!-- Vendor scrits: js libraries and plugins-->
+    <script src="vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/simplebar/dist/simplebar.min.js"></script>
+    <script src="vendor/tiny-slider/dist/min/tiny-slider.js"></script>
+    <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+    <!-- Main theme script-->
+    <script src="js/theme.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Product A",
+    "category": "Bags",
+    "image": ["01.jpg", "01.jpg", "01.jpg", "01.jpg"],
+    "price": "267.00",
+    "size": "S",
+    "qty": 1
+  },
+  {
+    "id": 2,
+    "name": "Product B",
+    "category": "Hats",
+    "image": ["01.jpg", "01.jpg", "01.jpg", "01.jpg"],
+    "price": "140.00",
+    "size": "M",
+    "qty": 2
+  },
+  {
+    "id": 3,
+    "name": "Product C",
+    "category": "Kitchenwares",
+    "image": ["01.jpg", "01.jpg", "01.jpg", "01.jpg"],
+    "price": "200.00",
+    "size": "L",
+    "qty": 3
+  },
+  {
+    "id": 4,
+    "name": "Product D",
+    "category": "Footwares",
+    "image": ["01.jpg", "01.jpg", "01.jpg", "01.jpg"],
+    "price": "200.00",
+    "size": "S",
+    "qty": 2
+  }
+]

@@ -1,0 +1,73 @@
+<!-- Toolbar with expandable filters-->
+<div class="collapse" id="shop-filters">
+  <div class="row pt-4">
+    <div class="col-lg-4 col-sm-6">
+      <!-- Categories-->
+      <div class="card mb-grid-gutter">
+        <div class="card-body px-4">
+          <div class="widget widget-categories">
+            <div class="accordion mt-n1" id="shop-categories">
+              <!-- Categories-->
+              <div class="accordion-item">
+                <h3 class="accordion-header">
+                  <a
+                    class="accordion-button"
+                    href="#categories"
+                    role="button"
+                    data-bs-toggle="collapse"
+                    aria-expanded="true"
+                    aria-controls="categories"
+                    >Categories</a
+                  >
+                </h3>
+                <div
+                  class="accordion-collapse collapse show"
+                  id="categories"
+                  data-bs-parent="#shop-categories"
+                >
+                  <div class="accordion-body">
+                    <div class="widget widget-links widget-filter">
+                      <ul
+                        class="widget-list widget-filter-list pt-1"
+                        style="height: 12rem"
+                        data-simplebar
+                        data-simplebar-auto-hide="false"
+                      >
+                        <li class="widget-list-item widget-filter-item">
+                          <a
+                            class="widget-list-link d-flex justify-content-between align-items-center"
+                            href="/products?categories=all"
+                            ><span class="widget-filter-item-text"
+                              >View all</span
+                            ><span class="fs-xs text-muted ms-3"
+                              ><%- totalProducts%></span
+                            ></a
+                          >
+                        </li>
+                        <% groupedProducts.forEach(([category, count]) => { %>
+                        <li class="widget-list-item widget-filter-item">
+                          <a
+                            class="widget-list-link d-flex justify-content-between align-items-center"
+                            href="/products?categories=<%- category %>"
+                          >
+                            <span class="widget-filter-item-text"
+                              ><%- category %></span
+                            >
+                            <span class="fs-xs text-muted ms-3"
+                              ><%- count %></span
+                            >
+                          </a>
+                        </li>
+                        <% }); %>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

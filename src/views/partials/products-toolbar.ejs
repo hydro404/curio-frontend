@@ -1,0 +1,35 @@
+<!-- Toolbar-->
+<div class="bg-light shadow-lg rounded-3 p-4 mt-n5 mb-4">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="dropdown me-2">
+      <a
+        class="btn btn-outline-secondary dropdown-toggle"
+        href="#shop-filters"
+        data-bs-toggle="collapse"
+        ><i class="ci-filter me-2"></i>Filters</a
+      >
+    </div>
+    <div class="d-flex">
+      <% if (page > 1) { %>
+      <a class="nav-link-style me-3" href="/products?page=<%= page - 1 %>"
+        ><i class="ci-arrow-left"></i
+      ></a>
+      <% } %>
+      <span class="fs-md"><%= page %> / <%= totalPages %></span>
+      <% if (page < totalPages) { %>
+      <a class="nav-link-style ms-3" href="/products?page=<%= page + 1 %>"
+        ><i class="ci-arrow-right"></i
+      ></a>
+      <% } %>
+    </div>
+    <div class="d-none d-sm-flex">
+      <a
+        class="btn btn-icon nav-link-style bg-primary text-light disabled opacity-100 me-2"
+        href="#"
+        ><i class="ci-view-grid"></i
+      ></a>
+    </div>
+  </div>
+  <!--Toolbar-->
+  <%-include('products-shop-filter')%>
+</div>

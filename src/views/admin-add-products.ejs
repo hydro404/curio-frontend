@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%- title %></title>
+    <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
+    <link
+      rel="stylesheet"
+      media="screen"
+      href="vendor/simplebar/dist/simplebar.min.css"
+    />
+    <link
+      rel="stylesheet"
+      media="screen"
+      href="vendor/tiny-slider/dist/tiny-slider.css"
+    />
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" href="css/theme.min.css" />
+  </head>
+  <body class="handheld-toolbar-enabled">
+    <%- include('partials/admin-signin-modal') %>
+    <main class="page-wrapper">
+      <header class="shadow-sm"><%-include('partials/admin-header') %></header>
+      <!-- Dashboard header-->
+      <div class="page-title-overlap bg-accent pt-4">
+        <div
+          class="container d-flex flex-wrap flex-sm-nowrap justify-content-center justify-content-sm-between align-items-center pt-2"
+        >
+          <div class="d-flex align-items-center pb-3">
+            <div class="ps-3">
+              <span class="d-block text-light fs-ms opacity-60 py-1"
+                >Hello,</span
+              >
+              <h3 class="text-light fs-lg mb-0">Admin Densol</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container mb-5 pb-3">
+        <div class="bg-light shadow-lg rounded-3 overflow-hidden">
+          <div class="row">
+            <!-- Sidebar-->
+            <aside class="col-lg-4 pe-xl-5">
+              <!-- Account menu toggler (hidden on screens larger 992px)-->
+              <div class="d-block d-lg-none p-4">
+                <a
+                  class="btn btn-outline-accent d-block"
+                  href="#account-menu"
+                  data-bs-toggle="collapse"
+                  ><i class="ci-menu me-2"></i>Account menu</a
+                >
+              </div>
+              <!-- Actual menu-->
+              <div class="h-100 border-end mb-2">
+                <div class="d-lg-block collapse" id="account-menu">
+                  <div class="bg-secondary p-4">
+                    <h3 class="fs-sm mb-0 text-muted">Admin Dashboard</h3>
+                  </div>
+                  <ul class="list-unstyled mb-0">
+                    <li class="border-bottom mb-0">
+                      <a
+                        class="nav-link-style d-flex align-items-center px-4 py-3 active"
+                        href="#"
+                        ><i class="ci-cloud-upload opacity-60 me-2"></i>Add New
+                        Product</a
+                      >
+                    </li>
+                    <li class="border-bottom mb-0">
+                      <a
+                        class="nav-link-style d-flex align-items-center px-4 py-3"
+                        href="/admin-update"
+                        ><i class="ci-edit opacity-60 me-2"></i>Update a
+                        Product</a
+                      >
+                    </li>
+                    <li class="mb-0">
+                      <a
+                        class="nav-link-style d-flex align-items-center px-4 py-3"
+                        href="account-signin.html"
+                        ><i class="ci-sign-out opacity-60 me-2"></i>Sign out</a
+                      >
+                    </li>
+                  </ul>
+                  <hr />
+                </div>
+              </div>
+            </aside>
+            <!-- Content-->
+            <section class="col-lg-8 pt-lg-4 pb-4 mb-3">
+              <div class="pt-2 px-4 ps-lg-0 pe-xl-5">
+                <!-- Title-->
+                <div
+                  class="d-sm-flex flex-wrap justify-content-between align-items-center pb-2"
+                >
+                  <h2 class="h3 py-2 me-2 text-center text-sm-start">
+                    Add New Product
+                  </h2>
+                </div>
+                <form>
+                  <div class="mb-3 pb-2">
+                    <label class="form-label" for="unp-product-name"
+                      >Product name</label
+                    >
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="unp-product-name"
+                    />
+                    <div class="form-text">
+                      Maximum 100 characters. No HTML or emoji allowed.
+                    </div>
+                  </div>
+                  <div class="mb-3 pb-2">
+                    <label class="form-label" for="unp-product-category"
+                      >Category</label
+                    >
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="unp-product-category"
+                    />
+                    <div class="form-text">
+                      Maximum 100 characters. No HTML or emoji allowed.
+                    </div>
+                  </div>
+                  <div class="mb-3 pb-2">
+                    <label class="form-label" for="unp-product-category"
+                      >Sizes</label
+                    >
+                    <input
+                      class="form-control"
+                      type="text"
+                      id="unp-product-category"
+                    />
+                    <div class="form-text">
+                      Example: S,M,L; if single size, put S.
+                    </div>
+                  </div>
+                  <div class="mb-3 pb-2">
+                    <label class="form-label" for="unp-product-files"
+                      >Select Product Image</label
+                    >
+                    <input
+                      class="form-control"
+                      type="file"
+                      id="unp-product-files"
+                    />
+                  </div>
+                  <div class="mb-3 py-2">
+                    <label class="form-label" for="unp-product-description"
+                      >Product description</label
+                    >
+                    <textarea
+                      class="form-control"
+                      rows="6"
+                      id="unp-product-description"
+                    ></textarea>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-6 mb-3">
+                      <label class="form-label" for="unp-stock">Stock</label>
+                      <div class="input-group">
+                        <input
+                          class="form-control"
+                          type="text"
+                          id="unp-stock"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                      <label class="form-label" for="unp-price">Price</label>
+                      <div class="input-group">
+                        <span class="input-group-text">&#8369;</span>
+                        <input
+                          class="form-control"
+                          type="text"
+                          id="unp-price"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <button class="btn btn-primary d-block w-100" type="submit">
+                    <i class="ci-cloud-upload fs-lg me-2"></i>Upload Product
+                  </button>
+                </form>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <footer><%-include('partials/admin-footer') %></footer>
+    </main>
+
+    <!-- Vendor scrits: js libraries and plugins-->
+    <script src="vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/simplebar/dist/simplebar.min.js"></script>
+    <script src="vendor/tiny-slider/dist/min/tiny-slider.js"></script>
+    <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+    <!-- Main theme script-->
+    <script src="js/theme.min.js"></script>
+  </body>
+</html>

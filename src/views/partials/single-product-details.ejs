@@ -1,0 +1,91 @@
+<!-- Product details-->
+<div class="col-lg-5 pt-4 pt-lg-0">
+  <div class="product-details ms-auto pb-3">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <a href="#" data-scroll>
+        <span class="d-inline-block fs-sm text-body align-middle mt-1 ms-1"
+          ><%- product.salesQuantity %> products sold</span
+        ></a
+      >
+      <button
+        class="btn-wishlist me-0 me-lg-n3"
+        type="button"
+        data-bs-toggle="tooltip"
+        title="Add to wishlist"
+      >
+        <i class="ci-heart"></i>
+      </button>
+    </div>
+    <div class="mb-3">
+      <span class="h3 fw-normal text-accent me-1"
+        >&#8369;<%-product.price%></span
+      >
+    </div>
+    <form class="mb-grid-gutter" method="post">
+      <div class="mb-3">
+        <div class="d-flex justify-content-between align-items-center pb-1">
+          <label class="form-label" for="product-size">Size:</label>
+        </div>
+        <select class="form-select" required id="product-size">
+          <option value="">Select size</option>
+          <% product.sizes.forEach(size => { %>
+          <option value="<%= size.toLowerCase() %>"><%= size %></option>
+          <% }); %>
+        </select>
+      </div>
+      <div class="mb-3 d-flex align-items-center">
+        <input
+          class="form-control w-50 me-2"
+          type="number"
+          id="quantity1"
+          min="1"
+          value="1"
+        />
+        <button class="btn btn-primary btn-shadow d-block w-100" type="submit">
+          <i class="ci-cart fs-lg me-2"></i>Add to Cart
+        </button>
+      </div>
+    </form>
+    <!-- Product panels-->
+    <div class="accordion mb-4" id="productPanels">
+      <div class="accordion-item">
+        <h3 class="accordion-header">
+          <a
+            class="accordion-button"
+            href="#productInfo"
+            role="button"
+            data-bs-toggle="collapse"
+            aria-expanded="true"
+            aria-controls="productInfo"
+            ><i
+              class="ci-announcement text-muted fs-lg align-middle mt-n1 me-2"
+            ></i
+            >Product info</a
+          >
+        </h3>
+        <div
+          class="accordion-collapse collapse show"
+          id="productInfo"
+          data-bs-parent="#productPanels"
+        >
+          <div class="accordion-body">
+            <h6 class="fs-sm mb-2"></h6>
+            <ul class="fs-sm ps-4">
+              <li><%- product.description%></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Sharing-->
+    <label class="form-label d-inline-block align-middle my-2 me-3"
+      >Share:</label
+    ><a class="btn-share btn-twitter me-2 my-2" href="#"
+      ><i class="ci-twitter"></i>Twitter</a
+    ><a class="btn-share btn-instagram me-2 my-2" href="#"
+      ><i class="ci-instagram"></i>Instagram</a
+    ><a class="btn-share btn-facebook my-2" href="#"
+      ><i class="ci-facebook"></i>Facebook</a
+    >
+  </div>
+</div>

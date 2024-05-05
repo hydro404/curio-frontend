@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%- title %></title>
+    <link rel="stylesheet" href="/css/theme.min.css" />
+    <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
+    <link
+      rel="stylesheet"
+      media="screen"
+      href="/vendor/simplebar/dist/simplebar.min.css"
+    />
+    <link
+      rel="stylesheet"
+      media="screen"
+      href="/vendor/tiny-slider/dist/tiny-slider.css"
+    />
+  </head>
+  <body class="handheld-toolbar-enabled">
+    <%- include('partials/sign-in-modal') %>
+    <main class="page-wrapper">
+      <header class="shadow-sm"><%-include('partials/header') %></header>
+      <%- include('partials/checkout-title') %>
+      <div class="container pb-5 mb-2 mb-md-4">
+        <div class="row">
+          <%- include('partials/checkout-details') %><%-
+          include('partials/checkout-shipping') %> <%-
+          include('partials/checkout-payment') %> <%-
+          include('partials/checkout-sidebar') %>
+        </div>
+        <!-- Navigation (mobile)-->
+        <div class="row d-lg-none">
+          <div class="col-lg-8">
+            <div class="d-flex pt-4 mt-3">
+              <div class="w-50 pe-3"></div>
+              <div class="w-50 ps-2">
+                <a
+                  class="btn btn-primary d-block w-100"
+                  href="/checkout-complete"
+                  ><span class="d-none d-sm-inline">Complete order</span
+                  ><span class="d-inline d-sm-none">Complete</span
+                  ><i class="ci-arrow-right mt-sm-0 ms-1"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <%- include('partials/footer', {categories: categories, totalProducts:
+      totalProducts}) %>
+    </footer>
+    <!-- Back To Top Button--><a class="btn-scroll-top" href="#top" data-scroll
+      ><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span
+      ><i class="btn-scroll-top-icon ci-arrow-up"> </i
+    ></a>
+    <!-- Vendor scrits: js libraries and plugins-->
+    <script src="vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/simplebar/dist/simplebar.min.js"></script>
+    <script src="vendor/tiny-slider/dist/min/tiny-slider.js"></script>
+    <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+    <!-- Main theme script-->
+    <script src="js/theme.min.js"></script>
+  </body>
+</html>

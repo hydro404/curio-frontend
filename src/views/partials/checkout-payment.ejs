@@ -1,0 +1,79 @@
+<section class="col-lg-8 pt-5 pb-5">
+  <!-- Payment methods accordion-->
+  <h2 class="h6 pb-3 mb-2">Choose payment method</h2>
+  <div class="accordion mb-2" id="payment-method">
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <a class="accordion-button" href="#card" data-bs-toggle="collapse"
+          ><i class="ci-card fs-lg me-2 mt-n1 align-middle"></i>Pay with Online
+          Payment</a
+        >
+      </h3>
+      <div
+        class="accordion-collapse collapse show"
+        id="card"
+        data-bs-parent="#payment-method"
+      >
+        <div class="accordion-body">
+          <div class="form-check mb-4">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="gcash"
+              name="payment-method"
+              checked
+            />
+            <label class="form-check-label" for="gcash"></label
+            ><span class="text-dark fw-medium">Pay With</span><br /><img
+              src="/img/gcash.png"
+              alt="GCash"
+              style="width: 187px"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <a
+          class="accordion-button collapsed"
+          href="#cod"
+          data-bs-toggle="collapse"
+          ><i class="ci-truck me-2 align-middle"></i>Cash on Delivery</a
+        >
+      </h3>
+      <div
+        class="accordion-collapse collapse"
+        id="cod"
+        data-bs-parent="#payment-method"
+      >
+        <div class="accordion-body fs-sm">
+          <div class="form-check mb-4">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="cash-on-delivery"
+              name="payment-method"
+              checked
+            />
+            <label class="form-check-label" for="cash-on-delivery"></label
+            ><span class="text-dark fw-medium"
+              >Pay with cash to the courier</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Navigation (desktop)-->
+  <div class="d-none d-lg-flex pt-4">
+    <div class="w-50 pe-3"></div>
+    <div class="w-50 ps-2">
+      <a class="btn btn-primary d-block w-100" href="/checkout-complete"
+        ><span class="d-none d-sm-inline">Complete order</span
+        ><span class="d-inline d-sm-none">Complete</span
+        ><i class="ci-arrow-right mt-sm-0 ms-1"></i
+      ></a>
+    </div>
+  </div>
+</section>
