@@ -4,10 +4,68 @@ const products = require("./products");
 const cartItems = require("./cart-items");
 const orders = require("./order-details");
 const wishlist = require("./wishlist-items");
+const userController = require("./src/controllers/userController");
+const axios = require("axios");
+require("dotenv").config();
 
-const userController = require('./src/controllers/userController');
+const cookieParser = require("cookie-parser");
 
-router.post('/signin', userController.signIn);
+const app = express();
+app.use(cookieParser());
+const serverURL = process.env.SERVER_URL;
+
+const getUserDetailsMiddleware = (req, res, next) => {
+  const cookieData = req.cookies.token;
+  console.log(cookieData);
+  res.locals.loggedIn = false;
+  const config = {
+    headers: {
+      'Authorization': `Bearer ${cookieData}`
+    },
+  };
+
+  if (cookieData) {
+    axios
+      .get(`${serverURL}/profile`, config)
+      .then((response) => {
+        res.locals.userDetails = {
+          "email": response.data.user.email,
+          "first_name": response.data.user.first_name,
+          "last_name": response.data.user.last_name,
+          "contact_number": response.data.user.contact_number,
+        };
+        res.locals.loggedIn = true;
+        next();
+      })
+      .catch((error) => {
+        res.locals.userDetails = {
+          user : {
+            "email": "",
+            "firstname": "",
+            "lastname": "",
+            "contact_number": "",
+          }
+        };
+        res.locals.loggedIn = false;
+        next();
+      });
+  }
+  else{
+      console.log('No token available in cookies');
+      res.locals.userDetails = {
+          user : {
+              "email": "",
+              "firstname": "",
+              "lastname": "",
+              "contact_number": "",
+          }
+      };
+      res.locals.loggedIn = false;
+      return next();
+  }
+};
+
+router.post("/signin", userController.signIn);
 // Calculate the total number of products in cart
 const totalCartItems = cartItems.length;
 
@@ -23,13 +81,10 @@ const groupedProducts = products.reduce((acc, product) => {
   return acc;
 }, {});
 
-router.get("/", (req, res) => {
-  // Sort products by salesQuantity in descending order
+router.get("/", getUserDetailsMiddleware, (req, res) => {
   const sortedProducts = products.sort(
     (a, b) => b.salesQuantity - a.salesQuantity
   );
-
-  // Get top 8 products
   const topProducts = sortedProducts.slice(0, 8);
 
   res.render("index", {
@@ -136,7 +191,7 @@ router.get("/account-wishlist", (req, res) => {
   });
 });
 
-router.get("/account-profile-info", (req, res) => {
+router.get("/account-profile-info", getUserDetailsMiddleware, (req, res) => {
   res.render("profile-info", {
     title: "Profile | Curio 4552",
     categories: categories, // Pass extracted categories to the template

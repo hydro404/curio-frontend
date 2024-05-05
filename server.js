@@ -1,10 +1,14 @@
 const express = require("express");
 const path = require("path");
+const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const routes = require("./routes");  // Assuming routes is an Express router
+const cookieParser = require('cookie-parser');
+
+app.use(cookieParser());  
 
 // Middlewares
 app.use(express.json());  // For parsing application/json

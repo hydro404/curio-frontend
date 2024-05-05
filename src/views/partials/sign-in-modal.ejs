@@ -33,6 +33,7 @@
         ></button>
       </div>
       <div class="modal-body tab-content py-4">
+        <span class="text-danger" id="error-message"></span> <!-- Add this line -->
         <form
           class="needs-validation tab-pane fade show active"
           autocomplete="off"
@@ -107,6 +108,7 @@
               id="su-name"
               placeholder="John"
               required
+              name="first_name"
             />
             <div class="invalid-feedback">Please fill in your name.</div>
             <label class="form-label" for="su-name">Last Name</label>
@@ -116,6 +118,7 @@
               id="su-name"
               placeholder="Doe"
               required
+              name="last_name"
             />
             <div class="invalid-feedback">Please fill in your name.</div>
           </div>
@@ -127,6 +130,7 @@
               id="su-email"
               placeholder="johndoe@example.com"
               required
+              name="email"
             />
             <div class="invalid-feedback">
               Please provide a valid email address.
@@ -140,6 +144,7 @@
                 type="password"
                 id="su-password"
                 required
+                name="password"
               />
               <label
                 class="password-toggle-btn"
@@ -174,7 +179,7 @@
           </div>
           <button
             class="btn btn-primary btn-shadow d-block w-100"
-            type="submit"
+            type="submit" id="register-btn"
           >
             Sign up
           </button>
