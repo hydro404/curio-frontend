@@ -34,13 +34,18 @@ function getCookie(name) {
 
 document.getElementById('login-btn').addEventListener('click', (event) => {
     event.preventDefault();
-
     const signInTab = document.querySelector("#signin-tab");
     const formData = new FormData(signInTab);
 
     $('#si-email').removeClass('is-invalid');
     $('#si-password').removeClass('is-invalid');
     $('#error-message').removeClass('d-block');
+
+    const dataObj = {};
+
+    formData.forEach((value, key) => {
+        dataObj[key] = value;
+    });
 
     if((formData.get('email') === '') || formData.get('password') === '') {
         if(formData.get('email') === '') {
@@ -54,35 +59,35 @@ document.getElementById('login-btn').addEventListener('click', (event) => {
     else{
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:3001/signin',
-            data: {
-                email: formData.get('email'),
-                password: formData.get('password')
-            },
+            url: '/signin',
+            data: dataObj,
             success: (response) => {
-                saveToken(response.token)
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "Signed in successfully!",
-                    showConfirmButton: false,
-                    timer: 1500,
-                    willClose: () => {
-                      // Schedule the page reload to happen just after the Swal alert closes
-                      setTimeout(() => {
-                        window.location.reload();
-                      }, 100); // Adding a short delay ensures the alert closes smoothly before the reload
-                    }
-                });
+                if (response.token) {
+                    saveToken(response.token);
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Signed in successfully!",
+                        showConfirmButton: false,
+                        timer: 1500,
+                        willClose: () => {
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 100);
+                        }
+                    });
+                } else {
+                    // Handle cases where the token is not present in the response
+                    $('#error-message').text('Sign-in failed, token not provided.');
+                    $('#error-message').addClass('d-block');
+                }
             },
             error: (error) => {
                 $('#error-message').text('Invalid credentials');
                 $('#error-message').addClass('d-block');
-    
             }
         });
     }
-    
 });
 
 document.getElementById('register-btn').addEventListener('click', (event) => {

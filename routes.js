@@ -5,6 +5,7 @@ const cartItems = require("./cart-items");
 const orders = require("./order-details");
 const wishlist = require("./wishlist-items");
 const userController = require("./src/controllers/userController");
+const cartController = require("./src/controllers/cartController");
 const axios = require("axios");
 require("dotenv").config();
 
@@ -12,6 +13,7 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 app.use(cookieParser());
+app.use(express.json());
 const serverURL = process.env.SERVER_URL;
 
 const getUserDetailsMiddleware = (req, res, next) => {
@@ -66,6 +68,22 @@ const getUserDetailsMiddleware = (req, res, next) => {
 };
 
 router.post("/signin", userController.signIn);
+router.post("/addToCart", cartController.addToCart);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Calculate the total number of products in cart
 const totalCartItems = cartItems.length;
 
@@ -89,15 +107,15 @@ router.get("/", getUserDetailsMiddleware, (req, res) => {
 
   res.render("index", {
     title: "Curio 4552",
-    products: topProducts, // Pass top 8 products to the template
-    categories: categories, // Pass extracted categories to the template
-    totalProducts: totalProducts, // Pass total number of products to the template
+    products: topProducts,
+    categories: categories,
+    totalProducts: totalProducts,
     cartItems,
     totalCartItems,
   });
 });
 
-router.get("/products", (req, res) => {
+router.get("/products", getUserDetailsMiddleware, (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1; // Current page, default is 1
     const pageSize = 12; // Number of items per page
@@ -111,6 +129,19 @@ router.get("/products", (req, res) => {
 
     // Calculate total number of pages
     const totalPages = Math.ceil(products.length / pageSize);
+
+    const categories = [
+      "Hats",
+      "Bags",
+      "Kitchenware",
+      "Footwear",
+      "Clothing",
+      "Furniture",
+      "Delicacies",
+      "Keychains",
+      "Display",
+      "Others"
+    ];
 
     res.render("products", {
       title: "Products | Curio 4552",
@@ -130,7 +161,7 @@ router.get("/products", (req, res) => {
   }
 });
 
-router.get("/product", (req, res) => {
+router.get("/product", getUserDetailsMiddleware, (req, res) => {
   const productId = parseInt(req.query.id);
   const product = products.find((product) => product.id === productId);
 
@@ -148,7 +179,7 @@ router.get("/product", (req, res) => {
   }
 });
 
-router.get("/cart", (req, res) => {
+router.get("/cart", getUserDetailsMiddleware, (req, res) => {
   res.render("cart", {
     title: "Cart | Curio 4552",
     categories: categories, // Pass extracted categories to the template
@@ -158,7 +189,7 @@ router.get("/cart", (req, res) => {
   });
 });
 
-router.get("/account-orders", (req, res) => {
+router.get("/account-orders", getUserDetailsMiddleware, (req, res) => {
   const ordersPerPage = 5;
   const currentPage = req.query.page || 1;
   const startIndex = (currentPage - 1) * ordersPerPage;
@@ -180,7 +211,7 @@ router.get("/account-orders", (req, res) => {
   });
 });
 
-router.get("/account-wishlist", (req, res) => {
+router.get("/account-wishlist", getUserDetailsMiddleware, (req, res) => {
   res.render("wishlist", {
     title: "Wishlist | Curio 4552",
     categories: categories, // Pass extracted categories to the template
@@ -201,7 +232,7 @@ router.get("/account-profile-info", getUserDetailsMiddleware, (req, res) => {
   });
 });
 
-router.get("/checkout", (req, res) => {
+router.get("/checkout", getUserDetailsMiddleware, (req, res) => {
   res.render("checkout", {
     title: "Checkout | Curio 4552",
     categories: categories, // Pass extracted categories to the template
@@ -211,7 +242,7 @@ router.get("/checkout", (req, res) => {
   });
 });
 
-router.get("/checkout-complete", (req, res) => {
+router.get("/checkout-complete", getUserDetailsMiddleware, (req, res) => {
   res.render("checkout-complete", {
     title: "Checkout | Curio 4552",
     categories: categories, // Pass extracted categories to the template
@@ -221,7 +252,7 @@ router.get("/checkout-complete", (req, res) => {
   });
 });
 
-router.get("/account-login", (req, res) => {
+router.get("/account-login", getUserDetailsMiddleware, (req, res) => {
   res.render("user-signin", {
     title: "Login | Curio 4552",
     categories: categories, // Pass extracted categories to the template

@@ -29,17 +29,72 @@
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="css/theme.min.css" />
   </head>
-  <body class="handheld-toolbar-enabled">
+  <body class="handheld-toolbar-enabled" onload="onloadZ()">
     <%- include('partials/sign-in-modal') %>
     <main class="page-wrapper">
       <header class="shadow-sm"><%-include('partials/header') %></header>
       <section><%-include('partials/products-title') %></section>
       <div class="container pb-5 mb-2 mb-md-4">
-        <%- include('partials/products-toolbar', {categories: categories,
-        totalProducts: totalProducts})%> <%-
-        include('partials/products-grid'),{paginatedProducts: paginatedProducts,
+        <nav class="container mt-n5">
+          <div class="d-flex align-items-center bg-white rounded-3 shadow-lg py-2 ps-sm-2 px-4 px-lg-2"><img
+              class="d-block rounded-3" src="img/icon.png" width="50" alt="Brand">
+            <div class="ps-lg-3 w-100 text-end">
+              <!-- For desktop-->
+              <ul class="nav nav-tabs d-none d-lg-flex border-0 mb-0">
+                <% categories.forEach((category, index) => { %>
+                <li class="nav-item"><a class="nav-link" id="<%= category %>_PC" onclick="active('<%= category %>_PC');"
+                    style="cursor: pointer;"><%= category %></a></li>
+                <% }) %>
+              </ul>
+              <!-- For mobile-->
+              <div class="btn-group dropdown d-lg-none ms-auto">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false"><i class="ci-menu fs-base me-2"></i>Categories</button>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <% categories.forEach((category, index) => { %>
+                    <a class="dropdown-item fs-base" id="<%= category %>_MB" onclick="active('<%= category %>_MB');"
+                      style="cursor: pointer;"><%= category %></a>
+                  <% }) %>
+              </div>
+            </div>
+          </div>
+        </nav>
+  
+      <script>
+        function active(str){
+          <% categories.forEach((category, index) => { %>
+            document.getElementById("<%= category %>_PC").classList.remove('active');
+            document.getElementById("<%= category %>_MB").classList.remove('active');
+          <% }) %>
+          myArray = str.split("_");
+          //myArray[0] == category name
+          //myArray[1] == display type
+  
+          sessionStorage.setItem("category", myArray[0]);
+          document.getElementById("catTitle").innerHTML = myArray[0].toUpperCase();
+  
+          if(myArray[1]==="MB"){
+            str2 = myArray[0] + "_PC";
+          }
+          else{
+            str2 = myArray[0] + "_MB";
+          }
+  
+          document.getElementById(str).classList.add('active');
+          document.getElementById(str2).classList.add('active');
+        }
+  
+        function onloadZ(){
+          document.getElementById("Hats_PC").classList.add('active');
+          document.getElementById("Hats_MB").classList.add('active');
+          document.getElementById("catTitle").innerHTML = "Hats".toUpperCase();
+        }
+      </script>
+        <%- include('partials/products-grid'),{paginatedProducts: paginatedProducts,
         page: page, categories: categories, totalPages: totalPages,} %>
       </div>
+  </main>
+      </section>
     </main>
     <footer>
       <%- include('partials/footer', {categories: categories, totalProducts:
@@ -56,6 +111,7 @@
     <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
     <script src="vendor/nouislider/dist/nouislider.min.js"></script>
     <script src="vendor/drift-zoom/dist/Drift.min.js"></script>
+    <script src="js/cart.js"></script>
     <!-- Main theme script-->
     <script src="js/theme.min.js"></script>
   </body>
