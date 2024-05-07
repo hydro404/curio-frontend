@@ -22,7 +22,7 @@ const getUserDetailsMiddleware = (req, res, next) => {
   res.locals.loggedIn = false;
   const config = {
     headers: {
-      'Authorization': `Bearer ${cookieData}`
+      Authorization: `${cookieData}`,
     },
   };
 
@@ -30,61 +30,42 @@ const getUserDetailsMiddleware = (req, res, next) => {
     axios
       .get(`${serverURL}/profile`, config)
       .then((response) => {
+        console.log(response);
         res.locals.userDetails = {
-          "email": response.data.user.email,
-          "first_name": response.data.user.first_name,
-          "last_name": response.data.user.last_name,
-          "contact_number": response.data.user.contact_number,
+          email: response.data.email,
+          firstname: response.data.firstname,
+          lastname: response.data.lastname,
+          phone: response.data.phone,
         };
         res.locals.loggedIn = true;
         next();
       })
       .catch((error) => {
         res.locals.userDetails = {
-          user : {
-            "email": "",
-            "firstname": "",
-            "lastname": "",
-            "contact_number": "",
-          }
+          email: "",
+          firstname: "",
+          lastname: "",
+          contact_number: "",
         };
         res.locals.loggedIn = false;
         next();
       });
-  }
-  else{
-      console.log('No token available in cookies');
-      res.locals.userDetails = {
-          user : {
-              "email": "",
-              "firstname": "",
-              "lastname": "",
-              "contact_number": "",
-          }
-      };
-      res.locals.loggedIn = false;
-      return next();
+  } else {
+    console.log("No token available in cookies");
+    res.locals.userDetails = {
+      email: "",
+      firstname: "",
+      lastname: "",
+      contact_number: "",
+    };
+    res.locals.loggedIn = false;
+    return next();
   }
 };
 
 router.post("/signin", userController.signIn);
 router.post("/signup", userController.signUp);
 router.post("/addToCart", cartController.addToCart);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Calculate the total number of products in cart
 const totalCartItems = cartItems.length;
@@ -142,7 +123,7 @@ router.get("/products", getUserDetailsMiddleware, (req, res) => {
       "Delicacies",
       "Keychains",
       "Display",
-      "Others"
+      "Others",
     ];
 
     res.render("products", {

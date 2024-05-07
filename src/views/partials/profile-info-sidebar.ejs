@@ -6,8 +6,8 @@
     >
       <div class="d-md-flex align-items-center">
         <div class="ps-md-3">
-          <h3 class="fs-base mb-0">Dinsel Napeli</h3>
-          <span class="text-accent fs-sm">dinsol@example.com</span>
+          <h3 class="fs-base mb-0"><%= userDetails.firstname %> <%= userDetails.lastname %></h3>
+          <span class="text-accent fs-sm"><%= userDetails.email %></span>
         </div>
       </div>
       <a
@@ -28,13 +28,6 @@
             class="nav-link-style d-flex align-items-center px-4 py-3"
             href="/account-orders"
             ><i class="ci-bag opacity-60 me-2"></i>Orders</a
-          >
-        </li>
-        <li class="border-bottom mb-0">
-          <a
-            class="nav-link-style d-flex align-items-center px-4 py-3"
-            href="/account-wishlist"
-            ><i class="ci-heart opacity-60 me-2"></i>Wishlist</a
           >
         </li>
       </ul>
