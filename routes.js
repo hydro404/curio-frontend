@@ -59,7 +59,7 @@ const getUserDetailsMiddleware = (req, res, next) => {
       contact_number: "",
     };
     res.locals.loggedIn = false;
-    return next();
+    next();
   }
 };
 
@@ -181,17 +181,23 @@ router.get("/account-orders", getUserDetailsMiddleware, (req, res) => {
 
   // Calculate total number of pages
   const totalPages = Math.ceil(orders.length / ordersPerPage);
+  if(res.locals.loggedIn){
+    res.render("orders", {
+      title: "Orders | Curio 4552",
+      categories: categories, // Pass extracted categories to the template
+      totalProducts: totalProducts,
+      cartItems,
+      totalCartItems,
+      ordersOnPage: ordersOnPage,
+      currentPage: currentPage,
+      totalPages: totalPages,
+    });
+  }
+  else{
+    res.redirect("/");
+  }
 
-  res.render("orders", {
-    title: "Orders | Curio 4552",
-    categories: categories, // Pass extracted categories to the template
-    totalProducts: totalProducts,
-    cartItems,
-    totalCartItems,
-    ordersOnPage: ordersOnPage,
-    currentPage: currentPage,
-    totalPages: totalPages,
-  });
+  
 });
 
 router.get("/account-wishlist", getUserDetailsMiddleware, (req, res) => {
