@@ -12,7 +12,7 @@
     ><a
       class="card-img-top d-block overflow-hidden"
       href="/product?id=<%= product.id %>"
-      ><img src="img/<%- product.image[0]%>" alt="Product"
+      ><img src="img/BAGS/ah1.jpg" alt="Product"
     /></a>
     <div class="card-body py-2">
       <a class="product-meta d-block fs-xs pb-1" href="#"
@@ -31,33 +31,7 @@
       </div>
     </div>
     <div class="card-body card-body-hidden">
-      <div class="text-center pb-2">
-        <% product.sizes.forEach((size, index) => { %>
-        <div class="form-check form-option form-check-inline mb-2">
-          <% if (index === 0) { %>
-          <input
-            class="form-check-input"
-            type="radio"
-            name="size<%= product.id %>"
-            id="s-<%= product.id %>-<%= index %>"
-            checked
-          />
-          <% } else { %>
-          <input
-            class="form-check-input"
-            type="radio"
-            name="size<%= product.id %>"
-            id="s-<%= product.id %>-<%= index %>"
-          />
-          <% } %>
-          <label
-            class="form-option-label"
-            for="s-<%= product.id %>-<%= index %>"
-            ><%= size %></label
-          >
-        </div>
-        <% }); %>
-      </div>
+
       <button class="btn btn-primary btn-sm d-block w-100 mb-2" type="button" onclick="addToCart(`<%= product.id %>`)">
         <i class="ci-cart fs-sm me-1"></i>Add to Cart
       </button>
