@@ -68,7 +68,9 @@ const getUserDetailsMiddleware = (req, res, next) => {
 };
 
 router.post("/signin", userController.signIn);
+router.post("/signup", userController.signUp);
 router.post("/addToCart", cartController.addToCart);
+
 
 
 

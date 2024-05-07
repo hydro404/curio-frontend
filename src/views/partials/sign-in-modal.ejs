@@ -94,6 +94,7 @@
             Sign in
           </button>
         </form>
+        <span class="text-danger" id="error-message2"></span> <!-- Add this line -->
         <form
           class="needs-validation tab-pane fade"
           autocomplete="off"
@@ -105,20 +106,20 @@
             <input
               class="form-control"
               type="text"
-              id="su-name"
+              id="su-fname"
               placeholder="John"
               required
-              name="first_name"
+              name="firstname"
             />
             <div class="invalid-feedback">Please fill in your name.</div>
             <label class="form-label" for="su-name">Last Name</label>
             <input
               class="form-control"
               type="text"
-              id="su-name"
+              id="su-lname"
               placeholder="Doe"
               required
-              name="last_name"
+              name="lastname"
             />
             <div class="invalid-feedback">Please fill in your name.</div>
           </div>

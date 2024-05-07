@@ -31,7 +31,6 @@ function getCookie(name) {
 }
 
 
-
 document.getElementById('login-btn').addEventListener('click', (event) => {
     event.preventDefault();
     const signInTab = document.querySelector("#signin-tab");
@@ -93,28 +92,68 @@ document.getElementById('login-btn').addEventListener('click', (event) => {
 document.getElementById('register-btn').addEventListener('click', (event) => {
     event.preventDefault();
 
-    const signInTab = document.querySelector("#signin-tab");
-    const formData = new FormData(signInTab);
+    const signUpTab = document.querySelector("#signup-tab");
+    const formData = new FormData(signUpTab);
 
-    $.ajax({
-        type: 'POST',
-        url: 'http://localhost:3001/signin',
-        data: {
-            email: formData.get('email'),
-            password: formData.get('password')
-        },
-        success: (response) => {
-            if (response) {
-                alert('Sign-in successful');
-                console.log(response.message);
-                console.log(response);
-            } else {
-                alert('Invalid credentials');
-            }
-        },
-        error: (error) => {
-            console.error('Sign-in error:', error);
-            alert('Server error during sign-in');
-        }
+    // Reset validation states
+    $('#su-fname, #su-lname, #su-email, #su-password, #su-password-confirm').removeClass('is-invalid');
+    $('#error-message').removeClass('d-block');
+
+    const dataObj = {};
+
+    formData.forEach((value, key) => {
+        dataObj[key] = value;
+        console.log(key, value)
     });
+
+    // Check for empty fields
+    if (!formData.get('firstname') || !formData.get('lastname') || !formData.get('email') || !formData.get('password') || $('#su-password-confirm').val() === ''){
+        if (!formData.get('firstname')) {
+            $('#su-fname').addClass('is-invalid');
+        }
+        if (!formData.get('lastname')) {
+            $('#su-lname').addClass('is-invalid');
+        }
+        if (!formData.get('email')) {
+            $('#su-email').addClass('is-invalid');
+        }
+        if (!formData.get('password')) {
+            $('#su-password').addClass('is-invalid');
+        }
+        if ($('#su-password-confirm').val() === '') {
+            $('#su-password-confirm').addClass('is-invalid');
+        }
+        console.log("May Mali")
+        return;
+    } if (formData.get('password') !== $('#su-password-confirm').val()) {
+        $('#su-password, #su-password-confirm').addClass('is-invalid');
+        console.log("Passwords don't match")
+        return;
+    } else {
+        $.ajax({
+            type: 'POST',
+            url: '/signup',
+            data: dataObj,
+            success: (response) => {
+                console.log(response)
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Signed up successfully!",
+                    showConfirmButton: false,
+                    timer: 1500,
+                    willClose: () => {
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 100);
+                    }
+                });
+            },
+            error: (error) => {
+                console.log(error);
+                $('#error-message').text('Sign-up failed, please check your details and try again.');
+                $('#error-message').addClass('d-block');
+            }
+        });
+    }
 });
