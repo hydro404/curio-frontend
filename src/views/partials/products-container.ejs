@@ -3,9 +3,14 @@
   <div class="card product-card" id="all <%- product.category %>">
     <a
       class="card-img-top d-block overflow-hidden"
-      href="/product?id=<%= product.id %>"
-      ><img src="img/BAGS/ah1.jpg" alt="Product"
-    /></a>
+      href="/product?id=<%= product.id %>">
+      <% if (product && product.images && product.images.length > 0) { %>
+        <% var image = product.images[0]; %>  <!-- Directly use the object -->
+        <img src="img/<%= image.path %>" alt="Product"/></a>
+    <% } else { %>
+      <img src="img/no_image.jpg" alt="Product"/></a>
+    <% } %>
+      
     <div class="card-body py-2">
       <a class="product-meta d-block fs-xs pb-1" href="#"
         ><%- product.category %></a
@@ -18,7 +23,7 @@
           <span class="text-accent">&#8369;<%- product.price%></span>
         </div>
         <span class="d-inline-block fs-sm text-body align-middle mt-1 ms-1"
-          ><%- product.salesQuantity %> sold</span
+          ><%- product.stock %> in stock!</span
         >
       </div>
     </div>

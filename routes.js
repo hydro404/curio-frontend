@@ -30,7 +30,7 @@ const getUserDetailsMiddleware = (req, res, next) => {
     axios
       .get(`${serverURL}/profile`, config)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         res.locals.userDetails = {
           email: response.data.email,
           firstname: response.data.firstname,
@@ -38,7 +38,21 @@ const getUserDetailsMiddleware = (req, res, next) => {
           phone: response.data.phone,
         };
         res.locals.loggedIn = true;
-        next();
+
+        return axios
+          .get(`${serverURL}/cart`, {
+            headers: {
+              Authorization: `${cookieData}`,
+            },
+          })
+          .then((cartResponse) => {
+            res.locals.cartItems = cartResponse.data;
+            next();
+          })
+          .catch((error) => {
+            res.locals.cartItems = [];
+            next();
+          });
       })
       .catch((error) => {
         res.locals.userDetails = {
@@ -47,6 +61,7 @@ const getUserDetailsMiddleware = (req, res, next) => {
           lastname: "",
           contact_number: "",
         };
+        res.locals.cartItems = [];
         res.locals.loggedIn = false;
         next();
       });
@@ -58,6 +73,7 @@ const getUserDetailsMiddleware = (req, res, next) => {
       lastname: "",
       contact_number: "",
     };
+    res.locals.cartItems = [];
     res.locals.loggedIn = false;
     next();
   }
@@ -87,75 +103,71 @@ router.get("/", getUserDetailsMiddleware, (req, res) => {
     (a, b) => b.salesQuantity - a.salesQuantity
   );
   const topProducts = sortedProducts.slice(0, 8);
-
+  const totalCartItems = res.locals.cartItems.length;
   res.render("index", {
     title: "Curio 4552",
     products: topProducts,
     categories: categories,
     totalProducts: totalProducts,
-    cartItems,
-    totalCartItems,
+    cartItems: res.locals.cartItems,
+    totalCartItems: totalCartItems,
   });
 });
 
 router.get("/products", getUserDetailsMiddleware, (req, res) => {
-  try {
-    const page = parseInt(req.query.page) || 1; // Current page, default is 1
-    const pageSize = 12; // Number of items per page
+  const page = parseInt(req.query.page) || 1; // Current page, default is 1
+  const pageSize = 100; // Number of items per page
 
-    // Calculate start and end indices for slicing the products array
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = page * pageSize;
+  // Calculate start and end indices for slicing the products array
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = page * pageSize;
 
-    // Slice the products array to get products for the current page
-    const paginatedProducts = products.slice(startIndex, endIndex);
+  axios
+    .get(`${serverURL}/categories`)
+    .then((response) => {
+      const categories = response.data;
+      return axios
+        .get(`${serverURL}/products`)
+        .then((response) => {
+          const products = response.data;
+          console.log(categories, products);
+          // Slice the products array to get products for the current page
+          const paginatedProducts = products.slice(startIndex, endIndex);
+          const totalPages = Math.ceil(products.length / pageSize);
 
-    // Calculate total number of pages
-    const totalPages = Math.ceil(products.length / pageSize);
-
-    const categories = [
-      "Hats",
-      "Bags",
-      "Kitchenware",
-      "Footwear",
-      "Clothing",
-      "Furniture",
-      "Delicacies",
-      "Keychains",
-      "Display",
-      "Others",
-    ];
-
-    res.render("products", {
-      title: "Products | Curio 4552",
-      paginatedProducts: paginatedProducts,
-      page: page,
-      totalPages: totalPages,
-      categories: categories, // Pass extracted categories to the template
-      totalProducts: totalProducts,
-      groupedProducts: Object.entries(groupedProducts), // Pass grouped products to the template as an array of entries
-      cartItems,
-      totalCartItems,
+          res.render("products", {
+            title: "Products | Curio 4552",
+            paginatedProducts: paginatedProducts,
+            page: page,
+            totalPages: totalPages,
+            products: products,
+            categories: categories,
+            totalProducts: totalProducts,
+            cartItems: res.locals.cartItems,
+            totalCartItems: totalCartItems,
+          });
+        })
+        .catch((error) => {
+          res.status(500).send("Internal Server Error");
+        });
+    })
+    .catch((error) => {
+      res.status(500).send("Internal Server Error");
     });
-  } catch (error) {
-    // If there's an error, return an error response
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
 });
 
 router.get("/product", getUserDetailsMiddleware, (req, res) => {
   const productId = parseInt(req.query.id);
   const product = products.find((product) => product.id === productId);
-
+  const totalCartItems = res.locals.cartItems.length;
   if (product) {
     res.render("single-product", {
       title: product.name,
       product: product,
       categories: categories, // Pass extracted categories to the template
       totalProducts: totalProducts,
-      cartItems,
-      totalCartItems,
+      cartItems: res.locals.cartItems,
+      totalCartItems: totalCartItems,
     });
   } else {
     res.status(404).send("Product not found");
@@ -163,12 +175,13 @@ router.get("/product", getUserDetailsMiddleware, (req, res) => {
 });
 
 router.get("/cart", getUserDetailsMiddleware, (req, res) => {
+  const totalCartItems = res.locals.cartItems.length;
   res.render("cart", {
     title: "Cart | Curio 4552",
     categories: categories, // Pass extracted categories to the template
     totalProducts: totalProducts,
-    cartItems,
-    totalCartItems,
+    cartItems: res.locals.cartItems,
+    totalCartItems: totalCartItems,
   });
 });
 
@@ -181,7 +194,7 @@ router.get("/account-orders", getUserDetailsMiddleware, (req, res) => {
 
   // Calculate total number of pages
   const totalPages = Math.ceil(orders.length / ordersPerPage);
-  if(res.locals.loggedIn){
+  if (res.locals.loggedIn) {
     res.render("orders", {
       title: "Orders | Curio 4552",
       categories: categories, // Pass extracted categories to the template
@@ -192,24 +205,21 @@ router.get("/account-orders", getUserDetailsMiddleware, (req, res) => {
       currentPage: currentPage,
       totalPages: totalPages,
     });
-  }
-  else{
+  } else {
     res.redirect("/");
   }
-
-  
 });
 
-router.get("/account-wishlist", getUserDetailsMiddleware, (req, res) => {
-  res.render("wishlist", {
-    title: "Wishlist | Curio 4552",
-    categories: categories, // Pass extracted categories to the template
-    totalProducts: totalProducts,
-    cartItems,
-    totalCartItems,
-    wishlist: wishlist,
-  });
-});
+// router.get("/account-wishlist", getUserDetailsMiddleware, (req, res) => {
+//   res.render("wishlist", {
+//     title: "Wishlist | Curio 4552",
+//     categories: categories, // Pass extracted categories to the template
+//     totalProducts: totalProducts,
+//     cartItems,
+//     totalCartItems,
+//     wishlist: wishlist,
+//   });
+// });
 
 router.get("/account-profile-info", getUserDetailsMiddleware, (req, res) => {
   res.render("profile-info", {

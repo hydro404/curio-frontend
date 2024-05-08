@@ -42,8 +42,8 @@
               <!-- For desktop-->
               <ul class="nav nav-tabs d-none d-lg-flex border-0 mb-0">
                 <% categories.forEach((category, index) => { %>
-                <li class="nav-item"><a class="nav-link" id="<%= category %>_PC" onclick="active('<%= category %>_PC');"
-                    style="cursor: pointer;"><%= category %></a></li>
+                <li class="nav-item"><a class="nav-link" id="<%= category.name %>_PC" onclick="active('<%= category.name %>_PC');"
+                    style="cursor: pointer;"><%= category.name %></a></li>
                 <% }) %>
               </ul>
               <!-- For mobile-->
@@ -52,8 +52,8 @@
                   aria-expanded="false"><i class="ci-menu fs-base me-2"></i>Categories</button>
                 <div class="dropdown-menu dropdown-menu-end">
                   <% categories.forEach((category, index) => { %>
-                    <a class="dropdown-item fs-base" id="<%= category %>_MB" onclick="active('<%= category %>_MB');"
-                      style="cursor: pointer;"><%= category %></a>
+                    <a class="dropdown-item fs-base" id="<%= category.name %>_MB" onclick="active('<%= category.name %>_MB');"
+                      style="cursor: pointer;"><%= category.name %></a>
                   <% }) %>
               </div>
             </div>
@@ -63,8 +63,8 @@
       <script>
         function active(str){
           <% categories.forEach((category, index) => { %>
-            document.getElementById("<%= category %>_PC").classList.remove('active');
-            document.getElementById("<%= category %>_MB").classList.remove('active');
+            document.getElementById("<%= category.name %>_PC").classList.remove('active');
+            document.getElementById("<%= category.name %>_MB").classList.remove('active');
           <% }) %>
           myArray = str.split("_");
           //myArray[0] == category name
@@ -85,9 +85,9 @@
         }
   
         function onloadZ(){
-          document.getElementById("Hats_PC").classList.add('active');
-          document.getElementById("Hats_MB").classList.add('active');
-          document.getElementById("catTitle").innerHTML = "Hats".toUpperCase();
+          document.getElementById("All_PC").classList.add('active');
+          document.getElementById("All_MB").classList.add('active');
+          document.getElementById("catTitle").innerHTML = "All".toUpperCase();
         }
       </script>
         <%- include('partials/products-grid'),{paginatedProducts: paginatedProducts,

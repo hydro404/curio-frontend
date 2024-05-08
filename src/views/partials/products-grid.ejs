@@ -1,8 +1,11 @@
 <!-- Products grid-->
-<div class="row pt-3 mx-n2">
+<div class="row pt-3 mx-n2" >
   <h2 class="text-center pt-2 pt-sm-0 mb-sm-4" id="catTitle"></h2>
-  <% paginatedProducts.forEach(function(product) { %> <%-
-  include('products-container', {product: product}) %> <% }); %>
+  <div class="row mx-n2" id="products">
+    <% paginatedProducts.forEach(function(product) { %> <%-
+      include('products-container', {product: product}) %> <% }); %>
+  </div>
+  
 </div>
 <hr class="my-3" />
 <!-- Pagination-->
