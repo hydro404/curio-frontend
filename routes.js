@@ -48,7 +48,21 @@ const getUserDetailsMiddleware = (req, res, next) => {
           })
           .then((cartResponse) => {
             res.locals.cartItems = cartResponse.data;
-            next();
+            console.log(res.locals.cartItems);
+            return axios
+              .get(`${serverURL}/products`)
+              .then((response) => {
+                res.locals.products = response.data;
+                var products = response.data;
+                res.locals.totalProducts = products.length;
+                res.locals.topProducts = products.slice(0, 8);
+                res.locals.totalCartItems = res.locals.cartItems.length;
+                next();
+              })
+              .catch((error) => {
+                console.log(error);
+                res.status(500).send("Internal Server Error");
+              });
           })
           .catch((error) => {
             res.locals.cartItems = [];
@@ -67,16 +81,29 @@ const getUserDetailsMiddleware = (req, res, next) => {
         next();
       });
   } else {
-    console.log("No token available in cookies");
-    res.locals.userDetails = {
-      email: "",
-      firstname: "",
-      lastname: "",
-      contact_number: "",
-    };
-    res.locals.cartItems = [];
-    res.locals.loggedIn = false;
-    next();
+    axios
+      .get(`${serverURL}/products`)
+      .then((response) => {
+        res.locals.products = response.data;
+        var products = response.data;
+        res.locals.totalProducts = products.length;
+        res.locals.topProducts = products.slice(0, 8);
+        res.locals.totalCartItems = 0;
+        console.log("No token available in cookies");
+        res.locals.userDetails = {
+          email: "",
+          firstname: "",
+          lastname: "",
+          contact_number: "",
+        };
+        res.locals.cartItems = [];
+        res.locals.loggedIn = false;
+        next();
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).send("Internal Server Error");
+      });
   }
 };
 
@@ -88,9 +115,6 @@ router.post("/filterProducts", productController.filterProducts);
 // Calculate the total number of products in cart
 const totalCartItems = cartItems.length;
 
-// Calculate the total number of products
-const totalProducts = products.length;
-
 // Extract unique categories from all products
 const categories = [...new Set(products.map((product) => product.category))];
 
@@ -101,18 +125,14 @@ const groupedProducts = products.reduce((acc, product) => {
 }, {});
 
 router.get("/", getUserDetailsMiddleware, (req, res) => {
-  const sortedProducts = products.sort(
-    (a, b) => b.salesQuantity - a.salesQuantity
-  );
-  const topProducts = sortedProducts.slice(0, 8);
-  const totalCartItems = res.locals.cartItems.length;
   res.render("index", {
-    title: "Curio 4552",
-    products: topProducts,
-    categories: categories,
-    totalProducts: totalProducts,
+    title: "Home | Curio 4552",
+    products: res.locals.topProducts,
+    categories: categories, // Pass extracted categories to the template
+    totalProducts: res.locals.totalProducts,
     cartItems: res.locals.cartItems,
-    totalCartItems: totalCartItems,
+    totalCartItems: res.locals.totalCartItems,
+    loggedIn: res.locals.loggedIn,
   });
 });
 
@@ -144,9 +164,9 @@ router.get("/products", getUserDetailsMiddleware, (req, res) => {
             totalPages: totalPages,
             products: products,
             categories: categories,
-            totalProducts: totalProducts,
+            totalProducts: res.locals.totalProducts,
             cartItems: res.locals.cartItems,
-            totalCartItems: totalCartItems,
+            totalCartItems: res.locals.totalCartItems,
           });
         })
         .catch((error) => {
@@ -183,7 +203,7 @@ router.get("/cart", getUserDetailsMiddleware, (req, res) => {
   res.render("cart", {
     title: "Cart | Curio 4552",
     categories: categories, // Pass extracted categories to the template
-    totalProducts: totalProducts,
+    totalProducts: res.locals.totalProducts,
     cartItems: res.locals.cartItems,
     totalCartItems: totalCartItems,
   });
@@ -229,9 +249,9 @@ router.get("/account-profile-info", getUserDetailsMiddleware, (req, res) => {
   res.render("profile-info", {
     title: "Profile | Curio 4552",
     categories: categories, // Pass extracted categories to the template
-    totalProducts: totalProducts,
-    cartItems,
-    totalCartItems,
+    totalProducts: res.locals.totalProducts,
+    cartItems: res.locals.cartItems,
+    totalCartItems: res.locals.totalCartItems,
   });
 });
 
