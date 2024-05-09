@@ -132,6 +132,7 @@ router.post("/signup", userController.signUp);
 router.post("/addToCart", cartController.addToCart);
 router.post("/filterProducts", productController.filterProducts);
 router.put("/updateProfile", userController.updateProfile);
+router.post("/updatePassword", userController.changePassword);
 
 // Calculate the total number of products in cart
 const totalCartItems = cartItems.length;
