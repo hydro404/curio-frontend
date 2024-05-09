@@ -53,12 +53,3 @@
     </div>
   </form>
 </section>
-
-<script>
-  function logout() {
-    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 2000);
-  }
-</script>

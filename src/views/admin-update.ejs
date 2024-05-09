@@ -33,7 +33,7 @@
               <span class="d-block text-light fs-ms opacity-60 py-1"
                 >Hello,</span
               >
-              <h3 class="text-light fs-lg mb-0">Admin Densol</h3>
+              <h3 class="text-light fs-lg mb-0">Admin!</h3>
             </div>
           </div>
         </div>
@@ -124,7 +124,7 @@
                         <td class="vertical-middle">
                           <button
                             class="btn btn-primary"
-                            onclick="viewModal('<%- product.name %>', '<%- product.category %>', '<%- product.price %>', '<%- product.sizes %>', '<%- product.stock %>', '<%- product.description %>')"
+                            onclick="viewModal(`<%- product.name %>`, `<%- product.category %>`, `<%- product.price %>`, `<%- product.sizes %>`, `<%- product.stock %>`, `<%- product.description %>`)"
                           >
                             View
                           </button>
@@ -224,20 +224,9 @@
                           || a === 'Others') return 1; if (b === 'Accessories'
                           || b === 'Others') return -1; return 0; });
                           categories.forEach(category => { %>
-                          <option value="<%- category%>"><%- category%></option>
+                          <option value="<%- category.name %>"><%- category.name%></option>
                           <% }); %>
                         </select>
-                      </div>
-
-                      <div class="mb-3">
-                        <label for="product-sizes" class="form-label"
-                          >Sizes
-                        </label>
-                        <input
-                          class="form-control"
-                          type="text"
-                          id="product-sizes"
-                        />
                       </div>
 
                       <div class="mb-3">

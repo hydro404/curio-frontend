@@ -57,7 +57,10 @@ function checkout(){
                     title: 'Checkout Success',
                     text: 'Thank you for your order!',
                     icon: 'success',
-                    confirmButtonText: 'OK'
+                    confirmButtonText: 'OK',
+                    timer: 1500
+                }).then(() => {
+                    window.location.href = '/account-orders';
                 })
             } else {
                 alert('Something went wrong');

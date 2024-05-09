@@ -135,4 +135,35 @@ const changePassword = async (req, res) => {
     });
 }
 
-module.exports = { signIn, signUp, updateProfile, changePassword};
+const loginAdmin = async (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).send('Email and password are required.');
+    }
+
+    axios.post(`${SERVER_URL}/admin/login`, {
+        username: username,
+        password: password
+    }).then(response => {
+        if (response.data.status === "success") {
+            res.status(200).json({
+                status: 'success',
+                message: 'Sign-in successful',
+                token: response.data.token
+            });
+        } else {
+            // handle cases where response from auth server does not contain a token
+            res.status(401).send('Invalid credentials');
+        }
+    }).catch(error => {
+        console.error("Sign-in error:", error);
+        if (error.response) {
+            // Forward the error status code and message from the auth server to the client
+            res.status(error.response.status).send(error.response.data);
+        } else {
+            res.status(500).send("Server error during sign-in");
+        }
+    });
+};
+
+module.exports = { signIn, signUp, updateProfile, changePassword, loginAdmin};

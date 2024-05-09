@@ -164,3 +164,50 @@ if(registerBtn){
     }
 });
 }
+
+function logout() {
+    setCookie('token', '', 0); // Set a cookie that expires immediately
+    window.location.href = '/';
+}
+
+var signinForm = document.getElementById('signin-form');
+if(signinForm){
+    signinForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(signinForm);
+        $.ajax({
+            type: 'POST',
+            url: '/loginAdmin',
+            data: {
+                username: formData.get('username'),
+                password: formData.get('password')
+            },
+            success: (response) => {
+                if (response.status === "success") {
+                    saveToken(response.token);
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Signed in successfully!",
+                        showConfirmButton: false,
+                        timer: 1500,
+                        willClose: () => {
+                            setTimeout(() => {
+                                window.location.href = "/admin-add-product";
+                            }, 100);
+                        }
+                    });
+                } else {
+                    // Handle cases where the token is not present in the response
+                    $('#error-message').text('Sign-in failed, token not provided.');
+                    $('#error-message').addClass('d-block');
+                }
+            },
+            error: (error) => {
+                console.log(error)
+                $('#error-message').text('Invalid credentials');
+                $('#error-message').addClass('d-block');
+            }
+        });
+    });
+}

@@ -154,6 +154,7 @@ router.delete("/removeFromCart", cartController.removeFromCart);
 router.put("/updateCart", cartController.updateCart);
 router.post("/checkout", cartController.checkoutCart);
 
+router.post("/loginAdmin", userController.loginAdmin);
 // // Calculate the total number of products in cart
 // const totalCartItems = cartItems.length;
 
@@ -246,14 +247,20 @@ router.get("/product", getUserDetailsMiddleware, (req, res) => {
 });
 
 router.get("/cart", getUserDetailsMiddleware, (req, res) => {
-  const totalCartItems = res.locals.cartItems.length;
-  res.render("cart", {
-    title: "Cart | Curio 4552",
-    categories: res.locals.categories, // Pass extracted categories to the template
-    totalProducts: res.locals.totalProducts,
-    cartItems: res.locals.cartItems,
-    totalCartItems: totalCartItems,
-  });
+  if (res.locals.loggedIn) {
+    const totalCartItems = res.locals.cartItems.length;
+    res.render("cart", {
+      title: "Cart | Curio 4552",
+      categories: res.locals.categories, // Pass extracted categories to the template
+      totalProducts: res.locals.totalProducts,
+      cartItems: res.locals.cartItems,
+      totalCartItems: totalCartItems,
+    });
+  }
+  else{
+    res.redirect("/");
+  }
+
 });
 
 router.get("/account-orders", getUserDetailsMiddleware, (req, res) => {
@@ -286,13 +293,18 @@ router.get("/account-orders", getUserDetailsMiddleware, (req, res) => {
 });
 
 router.get("/change-password", getUserDetailsMiddleware, (req, res) => {
-  res.render("change-password", {
-    title: "Change Password | Curio 4552",
-    categories: res.locals.categories, // Pass extracted categories to the template
-    totalProducts: res.locals.totalProducts,
-    cartItems: res.locals.cartItems,
-    totalCartItems: res.locals.totalCartItems,
-  });
+  if (res.locals.loggedIn) {
+    res.render("change-password", {
+      title: "Change Password | Curio 4552",
+      categories: res.locals.categories, // Pass extracted categories to the template
+      totalProducts: res.locals.totalProducts,
+      cartItems: res.locals.cartItems,
+      totalCartItems: res.locals.totalCartItems,
+    });
+  }
+  else{
+    res.redirect("/");
+  }
 });
 
 // router.get("/account-wishlist", getUserDetailsMiddleware, (req, res) => {
@@ -307,28 +319,38 @@ router.get("/change-password", getUserDetailsMiddleware, (req, res) => {
 // });
 
 router.get("/account-profile-info", getUserDetailsMiddleware, (req, res) => {
-  res.render("profile-info", {
-    title: "Profile | Curio 4552",
-    categories: res.locals.categories,
-    totalProducts: res.locals.totalProducts,
-    cartItems: res.locals.cartItems,
-    totalCartItems: res.locals.totalCartItems,
-    userDetails: res.locals.userDetails,
-  });
-  
+  if (res.locals.loggedIn) {
+    res.render("profile-info", {
+      title: "Profile | Curio 4552",
+      categories: res.locals.categories,
+      totalProducts: res.locals.totalProducts,
+      cartItems: res.locals.cartItems,
+      totalCartItems: res.locals.totalCartItems,
+      userDetails: res.locals.userDetails,
+    });
+  } else {
+    res.redirect("/");
+  }
+
 });
 
 router.get("/checkout", getUserDetailsMiddleware, (req, res) => {
-  res.render("checkout", {
-    title: "Checkout | Curio 4552",
-    categories: res.locals.categories, // Pass extracted categories to the template
-    totalProducts: res.locals.totalProducts,
-    cartItems: res.locals.cartItems,
-    totalCartItems: res.locals.totalCartItems,
-  });
+  if (res.locals.loggedIn) {
+    res.render("checkout", {
+      title: "Checkout | Curio 4552",
+      categories: res.locals.categories, // Pass extracted categories to the template
+      totalProducts: res.locals.totalProducts,
+      cartItems: res.locals.cartItems,
+      totalCartItems: res.locals.totalCartItems,
+    });
+  }
+  else{
+    res.redirect("/");
+  }
 });
 
 router.get("/checkout-complete", getUserDetailsMiddleware, (req, res) => {
+  if (res.locals.loggedIn) {
   res.render("checkout-complete", {
     title: "Checkout | Curio 4552",
     categories: res.locals.categories, // Pass extracted categories to the template
@@ -336,6 +358,11 @@ router.get("/checkout-complete", getUserDetailsMiddleware, (req, res) => {
     cartItems,
     totalCartItems,
   });
+  }
+  else{
+    res.redirect("/");
+  }
+
 });
 
 router.get("/account-login", getUserDetailsMiddleware, (req, res) => {
@@ -360,30 +387,20 @@ router.get("/admin-add-product", (req, res) => {
   });
 });
 
-router.get("/admin-update", (req, res) => {
+router.get("/admin-update", getUserDetailsMiddleware, (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1; // Current page, default is 1
-    const pageSize = 8; // Number of items per page
-
-    // Calculate start and end indices for slicing the products array
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = page * pageSize;
-
-    // Slice the products array to get products for the current page
-    const paginatedProducts = products.slice(startIndex, endIndex);
-
-    const product_category = req.query.product_category; // Retrieve product-category value from request
-
-    // Calculate total number of pages
-    const totalPages = Math.ceil(products.length / pageSize);
+    const pageSize = 100; // Number of items per page
+    // const product_category = req.query.product_category; // Retrieve product-category value from request
+    const totalPages = 1;
     res.render("admin-update", {
       title: "Admin | Curio 4552",
-      products: products,
-      paginatedProducts: paginatedProducts,
+      products: res.locals.products,
+      paginatedProducts: res.locals.products,
       page: page,
       totalPages: totalPages,
       categories: res.locals.categories,
-      product_category: product_category,
+      product_category: res.locals.categories,
     });
   } catch (error) {
     // If there's an error, return an error response
