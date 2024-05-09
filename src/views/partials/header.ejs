@@ -49,7 +49,7 @@
                                           <% if(cartItems && cartItems.length!==0){ %>
                                               <% cartItems.forEach(function(item) { %>
                                                       <div class="widget-cart-item py-2 border-bottom">
-                                                          <button class="btn-close text-danger" type="button" aria-label="Remove" onclick="removefromCart('<%= item.product_id %>')"><span aria-hidden="true">×</span></button>
+                                                          <button class="btn-close text-danger" type="button" aria-label="Remove" onclick="removefromCart('<%= item.id %>')"><span aria-hidden="true">×</span></button>
                                                           <div class="d-flex align-items-center"><a class="flex-shrink-0" href="/product?id=<%= item.product_id %>">
                                                             <% var images = item.images[0]; %>
 

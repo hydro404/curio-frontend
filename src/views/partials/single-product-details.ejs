@@ -4,12 +4,12 @@
     <div class="d-flex justify-content-between align-items-center mb-2">
       <a href="#" data-scroll>
         <span class="d-inline-block fs-sm text-body align-middle mt-1 ms-1">
-          <%- product.stock %> in stock!</span>
+          <%- product[0].stock %> in stock!</span>
       </a>
     </div>
     <div class="mb-3">
       <span class="h3 fw-normal text-accent me-1"
-        >&#8369;<%-product.price%></span
+        >&#8369;<%-product[0].price%></span
       >
     </div>
     <form class="mb-grid-gutter" method="post">
@@ -18,7 +18,7 @@
           <label class="form-label" for="product-variation">Variation:</label>
         </div>
         <select class="form-select" required id="product-variation">
-          <% var variations = JSON.parse(product.variation); %>
+          <% var variations = JSON.parse(product[0].variation); %>
           <% variations.forEach(variation => { %>
             <option value="<%= variation %>"><%= variation %></option>
           <% }); %>
@@ -31,13 +31,13 @@
           id="quantity1"
           min="1"
           value="1"
-          max="<%- product.stock %>"
+          max="<%- product[0].stock %>"
         />
         <button class="btn btn-primary btn-shadow d-block w-100" type="button" href="<%= !loggedIn ? '#signin-modal' : '' %>" 
           <% if (!loggedIn) { %>
             data-bs-toggle="modal"
           <% } else { %>
-            onclick="addToCart('<%= product.id %>')"
+            onclick="addToCart('<%= product[0].id %>')"
           <% } %>
         >
           <i class="ci-cart fs-lg me-2"></i>Add to Cart
@@ -69,7 +69,7 @@
           <div class="accordion-body">
             <h6 class="fs-sm mb-2"></h6>
             <ul class="fs-sm ps-4">
-              <li><%- product.description%></li>
+              <li><%- product[0].description%></li>
             </ul>
           </div>
         </div>

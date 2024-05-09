@@ -42,9 +42,6 @@ const getUserDetailsMiddleware = (req, res, next) => {
           phone: response.data.phone,
         };
         res.locals.loggedIn = true;
-
-        // console.log("User details: ", res.locals.userDetails);
-
         return axios
           .get(`${serverURL}/cart`, {
             headers: {
@@ -133,6 +130,7 @@ router.post("/addToCart", cartController.addToCart);
 router.post("/filterProducts", productController.filterProducts);
 router.put("/updateProfile", userController.updateProfile);
 router.post("/updatePassword", userController.changePassword);
+router.delete("/removeFromCart", cartController.removeFromCart);
 
 // Calculate the total number of products in cart
 const totalCartItems = cartItems.length;
@@ -203,22 +201,26 @@ router.get("/products", getUserDetailsMiddleware, (req, res) => {
 });
 
 router.get("/product", getUserDetailsMiddleware, (req, res) => {
-  const productId = parseInt(req.query.id);
-  const product = res.locals.products.find((product) => product.id === productId);
-  const totalCartItems = res.locals.cartItems.length;
-  if (product) {
-    res.render("single-product", {
-      title: product.name,
-      product: product,
-      categories: categories, // Pass extracted categories to the template
-      totalProducts: res.locals.totalProducts,
-      cartItems: res.locals.cartItems,
-      totalCartItems: res.locals.totalCartItems,
-      totalCartItems: totalCartItems,
-    });
-  } else {
-    res.status(404).send("Product not found");
-  }
+  const productId = parseInt(req.query.id); 
+  axios.get(`${serverURL}/products/${productId}`)
+  .then((response) => {
+    const product = response.data;
+    const totalCartItems = res.locals.cartItems.length;
+    if (product) {
+      res.render("single-product", {
+        title: product.name,
+        product: product,
+        categories: categories, // Pass extracted categories to the template
+        totalProducts: res.locals.totalProducts,
+        cartItems: res.locals.cartItems,
+        totalCartItems: res.locals.totalCartItems,
+        totalCartItems: totalCartItems,
+      });
+    } else {
+      res.status(404).send("Product not found");
+    }
+  });
+  
 });
 
 router.get("/cart", getUserDetailsMiddleware, (req, res) => {

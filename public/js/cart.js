@@ -60,3 +60,45 @@ function addToCart(id){
         }
     });
 }
+function removefromCart(id){
+    //ajax
+    $.ajax({
+        type: 'DELETE',
+        url: '/removeFromCart',
+        data: {
+            product_id: id,
+        },
+        success: (response) => {
+            console.log(response);
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Removed from cart!",
+                showConfirmButton: false,
+                timer: 1500,
+                willClose: () => {
+                    // Schedule the page reload to happen just after the Swal alert closes
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 100); // Adding a short delay ensures the alert closes smoothly before the reload
+                }
+            });
+        },
+        error: (error) => {
+            console.log(error);
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Something went wrong",
+                showConfirmButton: false,
+                // timer: 1500,
+                // willClose: () => {
+                //     // Schedule the page reload to happen just after the Swal alert closes
+                //     setTimeout(() => {
+                //         window.location.reload();
+                //     }, 100); // Adding a short delay ensures the alert closes smoothly before the reload
+                // }
+            });
+        }
+    });
+}
