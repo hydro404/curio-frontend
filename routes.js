@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const products = require("./products");
-const cartItems = require("./cart-items");
 const orders = require("./order-details");
 const wishlist = require("./wishlist-items");
 const userController = require("./src/controllers/userController");
@@ -60,7 +58,11 @@ const getUserDetailsMiddleware = (req, res, next) => {
                 res.locals.totalProducts = products.length;
                 res.locals.topProducts = products.slice(0, 8);
                 res.locals.totalCartItems = res.locals.cartItems.length;
-                next();
+                return axios.get(`${serverURL}/categories`).then((response) => {
+                  const categories = response.data;
+                  res.locals.categories = categories;
+                  next();
+                });
               })
               .catch((error) => {
                 // console.log(error);
@@ -69,6 +71,11 @@ const getUserDetailsMiddleware = (req, res, next) => {
           })
           .catch((error) => {
             res.locals.cartItems = [];
+            axios.get(`${serverURL}/categories`).then((response) => {
+              const categories = response.data;
+              res.locals.categories = categories;
+              next();
+            });
             next();
           });
       })
@@ -90,11 +97,20 @@ const getUserDetailsMiddleware = (req, res, next) => {
             };
             res.locals.cartItems = [];
             res.locals.loggedIn = false;
-            next();
+            return axios.get(`${serverURL}/categories`).then((response) => {
+              const categories = response.data;
+              res.locals.categories = categories;
+              next();
+            });
           })
           .catch((error) => {
             console.log(error);
             res.status(500).send("Internal Server Error");
+            axios.get(`${serverURL}/categories`).then((response) => {
+              const categories = response.data;
+              res.locals.categories = categories;
+              next();
+            });
           });
       });
   } else {
@@ -115,7 +131,11 @@ const getUserDetailsMiddleware = (req, res, next) => {
         };
         res.locals.cartItems = [];
         res.locals.loggedIn = false;
-        next();
+        return axios.get(`${serverURL}/categories`).then((response) => {
+          const categories = response.data;
+          res.locals.categories = categories;
+          next();
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -131,28 +151,30 @@ router.post("/filterProducts", productController.filterProducts);
 router.put("/updateProfile", userController.updateProfile);
 router.post("/updatePassword", userController.changePassword);
 router.delete("/removeFromCart", cartController.removeFromCart);
+router.put("/updateCart", cartController.updateCart);
+router.post("/checkout", cartController.checkoutCart);
 
-// Calculate the total number of products in cart
-const totalCartItems = cartItems.length;
+// // Calculate the total number of products in cart
+// const totalCartItems = cartItems.length;
 
-// Extract unique categories from all products
-const categories = [...new Set(products.map((product) => product.category))];
+// // Extract unique categories from all products
+// const categories = [...new Set(products.map((product) => product.category))];
 
-// Group products by category
-const groupedProducts = products.reduce((acc, product) => {
-  acc[product.category] = (acc[product.category] || 0) + 1;
-  return acc;
-}, {});
+// // Group products by category
+// const groupedProducts = products.reduce((acc, product) => {
+//   acc[product.category] = (acc[product.category] || 0) + 1;
+//   return acc;
+// }, {});
 
 router.get("/", getUserDetailsMiddleware, (req, res) => {
   res.render("index", {
     title: "Home | Curio 4552",
     products: res.locals.topProducts,
-    categories: categories, // Pass extracted categories to the template
     totalProducts: res.locals.totalProducts,
     cartItems: res.locals.cartItems,
     totalCartItems: res.locals.totalCartItems,
     loggedIn: res.locals.loggedIn,
+    categories: res.locals.categories,
   });
 });
 
@@ -183,7 +205,7 @@ router.get("/products", getUserDetailsMiddleware, (req, res) => {
             page: page,
             totalPages: totalPages,
             products: products,
-            categories: categories,
+            categories: res.locals.categories,
             totalProducts: res.locals.totalProducts,
             cartItems: res.locals.cartItems,
             totalCartItems: res.locals.totalCartItems,
@@ -208,9 +230,9 @@ router.get("/product", getUserDetailsMiddleware, (req, res) => {
     const totalCartItems = res.locals.cartItems.length;
     if (product) {
       res.render("single-product", {
-        title: product.name,
+        title: product[0].name,
         product: product,
-        categories: categories, // Pass extracted categories to the template
+        categories: res.locals.categories, // Pass extracted categories to the template
         totalProducts: res.locals.totalProducts,
         cartItems: res.locals.cartItems,
         totalCartItems: res.locals.totalCartItems,
@@ -227,7 +249,7 @@ router.get("/cart", getUserDetailsMiddleware, (req, res) => {
   const totalCartItems = res.locals.cartItems.length;
   res.render("cart", {
     title: "Cart | Curio 4552",
-    categories: categories, // Pass extracted categories to the template
+    categories: res.locals.categories, // Pass extracted categories to the template
     totalProducts: res.locals.totalProducts,
     cartItems: res.locals.cartItems,
     totalCartItems: totalCartItems,
@@ -247,7 +269,7 @@ router.get("/account-orders", getUserDetailsMiddleware, (req, res) => {
       const ordersOnPage = response.data;
       res.render("orders", {
         title: "Orders | Curio 4552",
-        categories: categories, // Pass extracted categories to the template
+        categories: res.locals.categories, // Pass extracted categories to the template
         totalProducts: res.locals.totalProducts,
         cartItems: res.locals.cartItems,
         totalCartItems: res.locals.totalCartItems,
@@ -266,7 +288,7 @@ router.get("/account-orders", getUserDetailsMiddleware, (req, res) => {
 router.get("/change-password", getUserDetailsMiddleware, (req, res) => {
   res.render("change-password", {
     title: "Change Password | Curio 4552",
-    categories: categories, // Pass extracted categories to the template
+    categories: res.locals.categories, // Pass extracted categories to the template
     totalProducts: res.locals.totalProducts,
     cartItems: res.locals.cartItems,
     totalCartItems: res.locals.totalCartItems,
@@ -287,7 +309,7 @@ router.get("/change-password", getUserDetailsMiddleware, (req, res) => {
 router.get("/account-profile-info", getUserDetailsMiddleware, (req, res) => {
   res.render("profile-info", {
     title: "Profile | Curio 4552",
-    categories: categories,
+    categories: res.locals.categories,
     totalProducts: res.locals.totalProducts,
     cartItems: res.locals.cartItems,
     totalCartItems: res.locals.totalCartItems,
@@ -299,7 +321,7 @@ router.get("/account-profile-info", getUserDetailsMiddleware, (req, res) => {
 router.get("/checkout", getUserDetailsMiddleware, (req, res) => {
   res.render("checkout", {
     title: "Checkout | Curio 4552",
-    categories: categories, // Pass extracted categories to the template
+    categories: res.locals.categories, // Pass extracted categories to the template
     totalProducts: res.locals.totalProducts,
     cartItems: res.locals.cartItems,
     totalCartItems: res.locals.totalCartItems,
@@ -309,8 +331,8 @@ router.get("/checkout", getUserDetailsMiddleware, (req, res) => {
 router.get("/checkout-complete", getUserDetailsMiddleware, (req, res) => {
   res.render("checkout-complete", {
     title: "Checkout | Curio 4552",
-    categories: categories, // Pass extracted categories to the template
-    totalProducts: totalProducts,
+    categories: res.locals.categories, // Pass extracted categories to the template
+    totalProducts: res.locals.totalProducts,
     cartItems,
     totalCartItems,
   });
@@ -319,10 +341,10 @@ router.get("/checkout-complete", getUserDetailsMiddleware, (req, res) => {
 router.get("/account-login", getUserDetailsMiddleware, (req, res) => {
   res.render("user-signin", {
     title: "Login | Curio 4552",
-    categories: categories, // Pass extracted categories to the template
-    totalProducts: totalProducts,
-    cartItems,
-    totalCartItems,
+    categories: res.locals.categories, // Pass extracted categories to the template
+    totalProducts: res.locals.totalProducts,
+    cartItems: res.locals.cartItems,
+    totalCartItems: res.locals.totalCartItems,
   });
 });
 
@@ -360,7 +382,7 @@ router.get("/admin-update", (req, res) => {
       paginatedProducts: paginatedProducts,
       page: page,
       totalPages: totalPages,
-      categories: categories,
+      categories: res.locals.categories,
       product_category: product_category,
     });
   } catch (error) {

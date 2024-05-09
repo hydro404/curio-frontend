@@ -44,23 +44,24 @@
           <!-- Product details -->
           <div class="d-block d-sm-flex align-items-center text-center text-sm-start">
             <a class="d-inline-block flex-shrink-0 mx-auto me-sm-4" href="/product?id=<%= item.id %>">
-              <img src="img/<%- item.path%>" width="160" alt="<%= item.name %>">
+              <% var images = item.images[0]; %>
+              <img src="img/<%- images.path %>" width="160" alt="<%= item.name %>">
             </a>
             <div class="pt-2">
               <h3 class="product-title fs-base mb-2">
                 <a href="/product?id=<%= item.id %>"><%= item.name %></a>
               </h3>
               <div class="fs-sm">
-                <span class="text-muted me-2">Size:</span><%= item.size %>
+                <span class="text-muted me-2">Variation:</span><%= item.variation %>
               </div>
               <div class="fs-lg text-accent pt-2"><span class="text-accent">&#8369;<%- item.price%></span></div>
             </div>
           </div>
           <!-- Quantity and remove button -->
           <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center text-sm-start" style="max-width: 9rem">
-            <label class="form-label" for="quantity<%= index + 1 %>">Quantity</label>
-            <input class="form-control" type="number" id="quantity<%= index + 1 %>" min="1" value="<%= item.quantity %>">
-            <button class="btn btn-link px-0 text-danger" type="button">
+            <label class="form-label" for="quantity_<%= index %>">Quantity</label>
+            <input class="form-control" type="number" id="quantity_<%= index %>" min="1" value="<%= item.quantity %>">
+            <button class="btn btn-link px-0 text-danger" type="button" onclick="removefromCart(<%= item.id %>)">
               <i class="ci-close-circle me-2"></i>
               <span class="fs-sm">Remove</span>
             </button>
@@ -68,7 +69,7 @@
         </div>
       <% }); %>
       <!-- Buttons-->
-      <button class="btn btn-outline-accent d-block w-100 mt-4" type="button">
+      <button class="btn btn-outline-accent d-block w-100 mt-4" type="button" onclick="updateCart()">
         <i class="ci-loading fs-base me-2"></i>Update cart
       </button>
     </section>
@@ -108,3 +109,45 @@
     </aside>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+  function updateCart(){
+    var length = <%= cartItems.length %>;
+    var ids = [];
+
+    <% cartItems.forEach(function(item, index) { %>
+      ids.push('<%= item.id %>');
+    <% }); %>
+
+    var isDone = false;
+
+    for (var i = 0; i < length; i++) {
+      var quantity = document.getElementById('quantity_' + i).value;
+      $.ajax({
+        url: '/updateCart',
+        type: 'PUT',
+        data: {
+          product_id: ids[i],
+          quantity: quantity
+        },
+        success: function(data) {
+          if(data.status === "success"){
+            Swal.fire({
+              icon: 'success',
+              title: 'Cart updated successfully!',
+              showConfirmButton: false,
+              timer: 1500
+            });
+          }
+        },
+        error: function(err){
+          console.log(err);
+        }
+      });
+    }
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+  }
+</script>

@@ -1,21 +1,37 @@
-<!-- Hero section-->
-<section class="bg-accent bg-position-top-center bg-repeat-0 py-5 mb-5 pb-5">
-  <div class="pb-lg-5 mb-lg-3">
-    <div class="container py-lg-5 my-lg-5">
-      <div class="row mb-4 mb-sm-5">
-        <div
-          class="col-lg-7 col-md-9 text-center text-align-center text-sm-start"
-        >
-          <h1 class="text-white lh-base">
-            <span class="fw-light">Hello, Admin</span>
-          </h1>
-          <div class="d-table scale-up delay-4 mx-auto mx-lg-0">
-            <a class="btn btn-primary" href="/admin-add-product"
-              >Modify Products<i class="ci-arrow-right ms-2 me-n1"></i
-            ></a>
+<div class="modal fade show" id="signin-modal" tabindex="-1" role="dialog" aria-modal="true" style="display: block;">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-secondary">
+        <ul class="nav nav-tabs card-header-tabs" role="tablist">
+          <li class="nav-item" role="presentation"><a class="nav-link fw-medium active" href="#signin-tab" data-bs-toggle="tab" role="tab" aria-selected="true"><i class="ci-unlocked me-2 mt-n1"></i>Sign in</a></li>
+        </ul>
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body tab-content py-4">
+        <form class="needs-validation tab-pane fade show active" autocomplete="off" novalidate="" id="signin-tab" role="tabpanel">
+          <div class="mb-3">
+            <label class="form-label" for="si-username">Username</label>
+            <input class="form-control" type="text" id="si-username" placeholder="admin" required>
+            <div class="invalid-feedback">Please provide a valid username.</div>
           </div>
-        </div>
+          <div class="mb-3">
+            <label class="form-label" for="si-password">Password</label>
+            <div class="password-toggle">
+              <input class="form-control" type="password" id="si-password" required="">
+              <label class="password-toggle-btn" aria-label="Show/hide password">
+                <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+              </label>
+            </div>
+          </div>
+          <div class="mb-3 d-flex flex-wrap justify-content-between">
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="si-remember">
+              <label class="form-check-label" for="si-remember">Remember me</label>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign in</button>
+        </form>
       </div>
     </div>
   </div>
-</section>
+</div>
