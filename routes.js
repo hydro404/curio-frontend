@@ -19,7 +19,7 @@ const serverURL = process.env.SERVER_URL;
 
 const getUserDetailsMiddleware = (req, res, next) => {
   const cookieData = req.cookies.token;
-  console.log(cookieData);
+  // console.log(cookieData);
   res.locals.loggedIn = false;
   const config = {
     headers: {
@@ -28,10 +28,12 @@ const getUserDetailsMiddleware = (req, res, next) => {
   };
 
   if (cookieData) {
+    console.log(cookieData);
     axios
-      .get(`${serverURL}/profile`, config)
+      .get(`${serverURL}/profile`, {
+        headers: { Authorization: `${cookieData}` },
+      })
       .then((response) => {
-        // console.log(response);
         res.locals.userDetails = {
           email: response.data.email,
           firstname: response.data.firstname,
@@ -39,6 +41,8 @@ const getUserDetailsMiddleware = (req, res, next) => {
           phone: response.data.phone,
         };
         res.locals.loggedIn = true;
+
+        console.log("User details: ", res.locals.userDetails);
 
         return axios
           .get(`${serverURL}/cart`, {
@@ -52,6 +56,7 @@ const getUserDetailsMiddleware = (req, res, next) => {
             return axios
               .get(`${serverURL}/products`)
               .then((response) => {
+                console.log(response.data);
                 res.locals.products = response.data;
                 var products = response.data;
                 res.locals.totalProducts = products.length;
@@ -70,15 +75,29 @@ const getUserDetailsMiddleware = (req, res, next) => {
           });
       })
       .catch((error) => {
-        res.locals.userDetails = {
-          email: "",
-          firstname: "",
-          lastname: "",
-          contact_number: "",
-        };
-        res.locals.cartItems = [];
-        res.locals.loggedIn = false;
-        next();
+        axios
+          .get(`${serverURL}/products`)
+          .then((response) => {
+            res.locals.products = response.data;
+            var products = response.data;
+            res.locals.totalProducts = products.length;
+            res.locals.topProducts = products.slice(0, 8);
+            res.locals.totalCartItems = 0;
+            console.log("No token available in cookies");
+            res.locals.userDetails = {
+              email: "",
+              firstname: "",
+              lastname: "",
+              contact_number: "",
+            };
+            res.locals.cartItems = [];
+            res.locals.loggedIn = false;
+            next();
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(500).send("Internal Server Error");
+          });
       });
   } else {
     axios
@@ -182,15 +201,16 @@ router.get("/products", getUserDetailsMiddleware, (req, res) => {
 
 router.get("/product", getUserDetailsMiddleware, (req, res) => {
   const productId = parseInt(req.query.id);
-  const product = products.find((product) => product.id === productId);
+  const product = res.locals.products.find((product) => product.id === productId);
   const totalCartItems = res.locals.cartItems.length;
   if (product) {
     res.render("single-product", {
       title: product.name,
       product: product,
       categories: categories, // Pass extracted categories to the template
-      totalProducts: totalProducts,
+      totalProducts: res.locals.totalProducts,
       cartItems: res.locals.cartItems,
+      totalCartItems: res.locals.totalCartItems,
       totalCartItems: totalCartItems,
     });
   } else {

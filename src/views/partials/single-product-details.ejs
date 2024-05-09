@@ -3,10 +3,10 @@
   <div class="product-details ms-auto pb-3">
     <div class="d-flex justify-content-between align-items-center mb-2">
       <a href="#" data-scroll>
-        <span class="d-inline-block fs-sm text-body align-middle mt-1 ms-1"
-          ><%- product.salesQuantity %> products sold</span
-        ></a
-      >
+        <% let randomSalesQuantity = Math.floor(Math.random() * 50) + 1; %>
+        <span class="d-inline-block fs-sm text-body align-middle mt-1 ms-1">
+          <%- randomSalesQuantity %> products sold</span>
+      </a>
       <button
         class="btn-wishlist me-0 me-lg-n3"
         type="button"
@@ -24,12 +24,13 @@
     <form class="mb-grid-gutter" method="post">
       <div class="mb-3">
         <div class="d-flex justify-content-between align-items-center pb-1">
-          <label class="form-label" for="product-size">Size:</label>
+          <label class="form-label" for="product-variation">Variation:</label>
         </div>
-        <select class="form-select" required id="product-size">
-          <option value="">Select size</option>
-          <% product.sizes.forEach(size => { %>
-          <option value="<%= size.toLowerCase() %>"><%= size %></option>
+        <select class="form-select" required id="product-variation">
+          <option value="">Select product variation</option>
+          <% var variations = JSON.parse(product.variation); %>
+          <% variations.forEach(variation => { %>
+            <option value="<%= variation %>"><%= variation %></option>
           <% }); %>
         </select>
       </div>
@@ -78,7 +79,7 @@
       </div>
     </div>
     <!-- Sharing-->
-    <label class="form-label d-inline-block align-middle my-2 me-3"
+    <!-- <label class="form-label d-inline-block align-middle my-2 me-3"
       >Share:</label
     ><a class="btn-share btn-twitter me-2 my-2" href="#"
       ><i class="ci-twitter"></i>Twitter</a
@@ -86,6 +87,6 @@
       ><i class="ci-instagram"></i>Instagram</a
     ><a class="btn-share btn-facebook my-2" href="#"
       ><i class="ci-facebook"></i>Facebook</a
-    >
+    > -->
   </div>
 </div>
