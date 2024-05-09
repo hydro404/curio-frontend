@@ -59,7 +59,7 @@
             </div>
           </div>
         </nav>
-  
+      <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
       <script>
         function active(str){
           <% categories.forEach((category, index) => { %>
@@ -82,7 +82,60 @@
   
           document.getElementById(str).classList.add('active');
           document.getElementById(str2).classList.add('active');
+
+          //AJAX
+          $.ajax({
+            url: '/filterProducts',
+            type: 'POST',
+            data: {category: myArray[0]},
+            success: function(data){
+              console.log(data.products);
+              const products = data.products;
+              document.getElementById("products").innerHTML = "";
+              
+              products.forEach((product, index) => {
+                if(product.images.length > 0){
+                  var image1 = product.images[0];
+                  var image = image1.path;
+                }
+                else{
+                  var image = "no_image.jpg";
+                }
+
+                document.getElementById("products").innerHTML += `
+                <div class="col-lg-3 col-md-4 col-sm-6 px-2 mb-4">
+                  <div class="card product-card" id="all ${product.category}">
+                    <a class="card-img-top d-block overflow-hidden" href="/product?id=${product.id}">
+                      <img src="img/${image}" alt="Product"/></a>
+                    <div class="card-body py-2">
+                      <a class="product-meta d-block fs-xs pb-1" href="#"
+                        >${product.category}</a
+                      >
+                      <h3 class="product-title fs-sm">
+                        <a href="/product?id=${product.id}">${product.name}</a>
+                      </h3>
+                      <div class="d-flex justify-content-between">
+                        <div class="product-price">
+                          <span class="text-accent">&#8369;${product.price}</span>
+                        </div>
+                        <span class="d-inline-block fs-sm text-body align-middle mt-1 ms-1"
+                          >${product.stock} in stock!</span
+                        >
+                      </div>
+                    </div>
+                    <div class="card-body card-body-hidden">
+                      <button class="btn btn-primary btn-sm d-block w-100 mb-2" type="button" onclick="addToCart('${product.id}')">
+                        <i class="ci-cart fs-sm me-1"></i>Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                  <hr class="d-sm-none" />
+                </div>
+                `;
+            });
         }
+        });
+      }
   
         function onloadZ(){
           document.getElementById("All_PC").classList.add('active');

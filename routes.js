@@ -6,6 +6,7 @@ const orders = require("./order-details");
 const wishlist = require("./wishlist-items");
 const userController = require("./src/controllers/userController");
 const cartController = require("./src/controllers/cartController");
+const productController = require("./src/controllers/productController");
 const axios = require("axios");
 require("dotenv").config();
 
@@ -82,6 +83,7 @@ const getUserDetailsMiddleware = (req, res, next) => {
 router.post("/signin", userController.signIn);
 router.post("/signup", userController.signUp);
 router.post("/addToCart", cartController.addToCart);
+router.post("/filterProducts", productController.filterProducts);
 
 // Calculate the total number of products in cart
 const totalCartItems = cartItems.length;
@@ -148,10 +150,12 @@ router.get("/products", getUserDetailsMiddleware, (req, res) => {
           });
         })
         .catch((error) => {
+          console.log(error);
           res.status(500).send("Internal Server Error");
         });
     })
     .catch((error) => {
+      console.log(error);
       res.status(500).send("Internal Server Error");
     });
 });
