@@ -300,9 +300,9 @@ router.get("/checkout", getUserDetailsMiddleware, (req, res) => {
   res.render("checkout", {
     title: "Checkout | Curio 4552",
     categories: categories, // Pass extracted categories to the template
-    totalProducts: totalProducts,
-    cartItems,
-    totalCartItems,
+    totalProducts: res.locals.totalProducts,
+    cartItems: res.locals.cartItems,
+    totalCartItems: res.locals.totalCartItems,
   });
 });
 
