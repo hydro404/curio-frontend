@@ -28,13 +28,14 @@ const getUserDetailsMiddleware = (req, res, next) => {
   };
 
   if (cookieData) {
-    console.log(cookieData);
+    // console.log(cookieData);
     axios
       .get(`${serverURL}/profile`, {
         headers: { Authorization: `${cookieData}` },
       })
       .then((response) => {
         res.locals.userDetails = {
+          id: response.data.id,
           email: response.data.email,
           firstname: response.data.firstname,
           lastname: response.data.lastname,

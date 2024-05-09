@@ -5,16 +5,23 @@ require('dotenv').config();
 var SERVER_URL = process.env.SERVER_URL;
 
 const addToCart = async (req, res) => {
-    const { id, quantity } = req.body;
-    if (!id || !quantity) {
+    const cookieData = req.cookies.token;
+    const { user_id, product_id, quantity } = req.body;
+    console.log(cookieData)
+    if (!user_id || !product_id  || !quantity) {
         return res.status(400).send('ID and quantity are required.');
     }
 
     try {
-        const response = await axios.post(`${SERVER_URL}/addToCart`, { id, quantity });
-        if (response.data.message === 'Added to cart') {
+        const response = await axios.post(`${SERVER_URL}/cart`, { user_id, product_id, quantity },
+        {
+            headers: { Authorization: `${cookieData}` },
+        }
+        );
+        if (response.data.status === "success") {
             res.status(200).json({
-                message: 'Added to cart'
+                message: 'Added to cart',
+                status: 'success',
             });
         } else {
             res.status(400).send('Something went wrong');
