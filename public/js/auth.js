@@ -30,66 +30,72 @@ function getCookie(name) {
     return "";
 }
 
+var loginBtn = document.getElementById('login-btn');
 
-document.getElementById('login-btn').addEventListener('click', (event) => {
-    event.preventDefault();
-    const signInTab = document.querySelector("#signin-tab");
-    const formData = new FormData(signInTab);
+if(loginBtn){
+    loginBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        const signInTab = document.querySelector("#signin-tab");
+        const formData = new FormData(signInTab);
 
-    $('#si-email').removeClass('is-invalid');
-    $('#si-password').removeClass('is-invalid');
-    $('#error-message').removeClass('d-block');
+        $('#si-email').removeClass('is-invalid');
+        $('#si-password').removeClass('is-invalid');
+        $('#error-message').removeClass('d-block');
 
-    const dataObj = {};
+        const dataObj = {};
 
-    formData.forEach((value, key) => {
-        dataObj[key] = value;
-    });
+        formData.forEach((value, key) => {
+            dataObj[key] = value;
+        });
 
-    if((formData.get('email') === '') || formData.get('password') === '') {
-        if(formData.get('email') === '') {
-            $('#si-email').addClass('is-invalid');
+        if((formData.get('email') === '') || formData.get('password') === '') {
+            if(formData.get('email') === '') {
+                $('#si-email').addClass('is-invalid');
+            }
+            if(formData.get('password') === '') {
+                $('#si-password').addClass('is-invalid');
+            }
+            return;
         }
-        if(formData.get('password') === '') {
-            $('#si-password').addClass('is-invalid');
-        }
-        return;
-    }
-    else{
-        $.ajax({
-            type: 'POST',
-            url: '/signin',
-            data: dataObj,
-            success: (response) => {
-                if (response.token) {
-                    saveToken(response.token);
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: "Signed in successfully!",
-                        showConfirmButton: false,
-                        timer: 1500,
-                        willClose: () => {
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 100);
-                        }
-                    });
-                } else {
-                    // Handle cases where the token is not present in the response
-                    $('#error-message').text('Sign-in failed, token not provided.');
+        else{
+            $.ajax({
+                type: 'POST',
+                url: '/signin',
+                data: dataObj,
+                success: (response) => {
+                    if (response.token) {
+                        saveToken(response.token);
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "Signed in successfully!",
+                            showConfirmButton: false,
+                            timer: 1500,
+                            willClose: () => {
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 100);
+                            }
+                        });
+                    } else {
+                        // Handle cases where the token is not present in the response
+                        $('#error-message').text('Sign-in failed, token not provided.');
+                        $('#error-message').addClass('d-block');
+                    }
+                },
+                error: (error) => {
+                    $('#error-message').text('Invalid credentials');
                     $('#error-message').addClass('d-block');
                 }
-            },
-            error: (error) => {
-                $('#error-message').text('Invalid credentials');
-                $('#error-message').addClass('d-block');
-            }
-        });
-    }
-});
+            });
+        }
+    });
+}
 
-document.getElementById('register-btn').addEventListener('click', (event) => {
+var registerBtn = document.getElementById('register-btn');
+
+if(registerBtn){
+    registerBtn.addEventListener('click', (event) => {
     event.preventDefault();
 
     const signUpTab = document.querySelector("#signup-tab");
@@ -157,3 +163,4 @@ document.getElementById('register-btn').addEventListener('click', (event) => {
         });
     }
 });
+}

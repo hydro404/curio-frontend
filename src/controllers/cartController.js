@@ -6,14 +6,15 @@ var SERVER_URL = process.env.SERVER_URL;
 
 const addToCart = async (req, res) => {
     const cookieData = req.cookies.token;
-    const { user_id, product_id, quantity } = req.body;
+    const { product_id, quantity, variation } = req.body;
     console.log(cookieData)
-    if (!user_id || !product_id  || !quantity) {
+    console.log(req.body)
+    if (!variation || !product_id  || !quantity) {
         return res.status(400).send('ID and quantity are required.');
     }
 
     try {
-        const response = await axios.post(`${SERVER_URL}/cart`, { user_id, product_id, quantity },
+        const response = await axios.post(`${SERVER_URL}/cart`, { product_id, quantity, variation },
         {
             headers: { Authorization: `${cookieData}` },
         }

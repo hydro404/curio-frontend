@@ -14,16 +14,17 @@ function getCookie(name) {
 
 
 function addToCart(id){
-    
-    var user_id = $('#user_id').val();
+    var quantity = $('#quantity1').val();
+    var product_variation = $('#product-variation').val();
+    console.log(product_variation)
     //ajax
     $.ajax({
         type: 'POST',
         url: '/addToCart',
         data: {
-            user_id: user_id,
             product_id: id,
-            quantity: 1
+            quantity: quantity,
+            variation: product_variation,
         },
         success: (response) => {
             console.log(response);
@@ -42,6 +43,7 @@ function addToCart(id){
             });
         },
         error: (error) => {
+            console.log(error);
             Swal.fire({
                 position: "center",
                 icon: "error",

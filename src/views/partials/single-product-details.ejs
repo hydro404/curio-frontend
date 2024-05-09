@@ -3,18 +3,9 @@
   <div class="product-details ms-auto pb-3">
     <div class="d-flex justify-content-between align-items-center mb-2">
       <a href="#" data-scroll>
-        <% let randomSalesQuantity = Math.floor(Math.random() * 50) + 1; %>
         <span class="d-inline-block fs-sm text-body align-middle mt-1 ms-1">
-          <%- randomSalesQuantity %> products sold</span>
+          <%- product.stock %> in stock!</span>
       </a>
-      <button
-        class="btn-wishlist me-0 me-lg-n3"
-        type="button"
-        data-bs-toggle="tooltip"
-        title="Add to wishlist"
-      >
-        <i class="ci-heart"></i>
-      </button>
     </div>
     <div class="mb-3">
       <span class="h3 fw-normal text-accent me-1"
@@ -27,7 +18,6 @@
           <label class="form-label" for="product-variation">Variation:</label>
         </div>
         <select class="form-select" required id="product-variation">
-          <option value="">Select product variation</option>
           <% var variations = JSON.parse(product.variation); %>
           <% variations.forEach(variation => { %>
             <option value="<%= variation %>"><%= variation %></option>
@@ -41,8 +31,15 @@
           id="quantity1"
           min="1"
           value="1"
+          max="<%- product.stock %>"
         />
-        <button class="btn btn-primary btn-shadow d-block w-100" type="submit">
+        <button class="btn btn-primary btn-shadow d-block w-100" type="button" href="<%= !loggedIn ? '#signin-modal' : '' %>" 
+          <% if (!loggedIn) { %>
+            data-bs-toggle="modal"
+          <% } else { %>
+            onclick="addToCart('<%= product.id %>')"
+          <% } %>
+        >
           <i class="ci-cart fs-lg me-2"></i>Add to Cart
         </button>
       </div>

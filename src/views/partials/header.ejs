@@ -51,7 +51,9 @@
                                                       <div class="widget-cart-item py-2 border-bottom">
                                                           <button class="btn-close text-danger" type="button" aria-label="Remove" onclick="removefromCart('<%= item.product_id %>')"><span aria-hidden="true">×</span></button>
                                                           <div class="d-flex align-items-center"><a class="flex-shrink-0" href="/product?id=<%= item.product_id %>">
-                                                            <img src="img/<%= item.path %>" width="64" alt="Product"/></a>
+                                                            <% var images = item.images[0]; %>
+
+                                                            <img src="img/<%= images.path %>" width="64" alt="Product"/></a>
                                         
                                                           </a>
                                                           <div class="ps-2">
