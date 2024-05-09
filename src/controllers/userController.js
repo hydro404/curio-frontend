@@ -66,4 +66,39 @@ const signUp = async (req, res) => {
     });
 };
 
-module.exports = { signIn, signUp };
+const updateProfile = async (req, res) => {
+    const cookieData = req.cookies.token;
+
+    const { firstname, lastname, phone } = req.body;
+    console.log(req.body)
+    if (!firstname || !lastname || !phone) {
+        return res.status(400).send('First name, last name, and email are required.');
+    }
+    axios.put(`${SERVER_URL}/profile`, {
+        firstname: firstname,
+        lastname: lastname,
+        phone: phone
+    }, {
+        headers: { Authorization: `${cookieData}` },
+    }
+    ).then(response => {
+        if (response.data.status === 'success') {
+            res.status(200).json({
+                message: 'Profile updated successfully',
+                status: 'success'
+            });
+        } else {
+            res.status(401).send('Profile update failed. Please try again.');
+        }
+    }).catch(error => {
+        console.error("Profile update error:", error);
+        if (error.response) {
+            // Forward the error status code and message from the auth server to the client
+            res.status(error.response.status).send(error.response.data);
+        } else {
+            res.status(500).send("Server error during profile update");
+        }
+    });
+};
+
+module.exports = { signIn, signUp, updateProfile};

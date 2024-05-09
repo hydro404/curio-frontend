@@ -43,7 +43,7 @@ const getUserDetailsMiddleware = (req, res, next) => {
         };
         res.locals.loggedIn = true;
 
-        console.log("User details: ", res.locals.userDetails);
+        // console.log("User details: ", res.locals.userDetails);
 
         return axios
           .get(`${serverURL}/cart`, {
@@ -53,11 +53,11 @@ const getUserDetailsMiddleware = (req, res, next) => {
           })
           .then((cartResponse) => {
             res.locals.cartItems = cartResponse.data;
-            console.log(res.locals.cartItems);
+            // console.log(res.locals.cartItems);
             return axios
               .get(`${serverURL}/products`)
               .then((response) => {
-                console.log(response.data);
+                // console.log(response.data);
                 res.locals.products = response.data;
                 var products = response.data;
                 res.locals.totalProducts = products.length;
@@ -66,7 +66,7 @@ const getUserDetailsMiddleware = (req, res, next) => {
                 next();
               })
               .catch((error) => {
-                console.log(error);
+                // console.log(error);
                 res.status(500).send("Internal Server Error");
               });
           })
@@ -131,6 +131,7 @@ router.post("/signin", userController.signIn);
 router.post("/signup", userController.signUp);
 router.post("/addToCart", cartController.addToCart);
 router.post("/filterProducts", productController.filterProducts);
+router.put("/updateProfile", userController.updateProfile);
 
 // Calculate the total number of products in cart
 const totalCartItems = cartItems.length;
@@ -231,28 +232,42 @@ router.get("/cart", getUserDetailsMiddleware, (req, res) => {
 });
 
 router.get("/account-orders", getUserDetailsMiddleware, (req, res) => {
-  const ordersPerPage = 5;
+  const cookieData = req.cookies.token;
+  const ordersPerPage = 100;
   const currentPage = req.query.page || 1;
-  const startIndex = (currentPage - 1) * ordersPerPage;
-  const endIndex = startIndex + ordersPerPage;
-  const ordersOnPage = orders.slice(startIndex, endIndex);
 
   // Calculate total number of pages
   const totalPages = Math.ceil(orders.length / ordersPerPage);
   if (res.locals.loggedIn) {
-    res.render("orders", {
-      title: "Orders | Curio 4552",
-      categories: categories, // Pass extracted categories to the template
-      totalProducts: totalProducts,
-      cartItems,
-      totalCartItems,
-      ordersOnPage: ordersOnPage,
-      currentPage: currentPage,
-      totalPages: totalPages,
+    axios.get(`${serverURL}/orders`, { headers: { Authorization: `${cookieData}` },})
+    .then((response) => {
+      const ordersOnPage = response.data;
+      res.render("orders", {
+        title: "Orders | Curio 4552",
+        categories: categories, // Pass extracted categories to the template
+        totalProducts: res.locals.totalProducts,
+        cartItems: res.locals.cartItems,
+        totalCartItems: res.locals.totalCartItems,
+        ordersOnPage: ordersOnPage,
+        currentPage: currentPage,
+        totalPages: totalPages,
+      });
     });
+
+    
   } else {
     res.redirect("/");
   }
+});
+
+router.get("/change-password", getUserDetailsMiddleware, (req, res) => {
+  res.render("change-password", {
+    title: "Change Password | Curio 4552",
+    categories: categories, // Pass extracted categories to the template
+    totalProducts: res.locals.totalProducts,
+    cartItems: res.locals.cartItems,
+    totalCartItems: res.locals.totalCartItems,
+  });
 });
 
 // router.get("/account-wishlist", getUserDetailsMiddleware, (req, res) => {
@@ -269,11 +284,13 @@ router.get("/account-orders", getUserDetailsMiddleware, (req, res) => {
 router.get("/account-profile-info", getUserDetailsMiddleware, (req, res) => {
   res.render("profile-info", {
     title: "Profile | Curio 4552",
-    categories: categories, // Pass extracted categories to the template
+    categories: categories,
     totalProducts: res.locals.totalProducts,
     cartItems: res.locals.cartItems,
     totalCartItems: res.locals.totalCartItems,
+    userDetails: res.locals.userDetails,
   });
+  
 });
 
 router.get("/checkout", getUserDetailsMiddleware, (req, res) => {
