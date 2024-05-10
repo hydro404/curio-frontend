@@ -1,38 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%- title %></title>
-    <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
-    <link
-      rel="stylesheet"
-      media="screen"
-      href="vendor/simplebar/dist/simplebar.min.css"
-    />
-    <link
-      rel="stylesheet"
-      media="screen"
-      href="vendor/tiny-slider/dist/tiny-slider.css"
-    />
-    <!-- Main Theme Styles + Bootstrap-->
-    <link rel="stylesheet" media="screen" href="css/theme.min.css" />
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  </head>
-  <body class="handheld-toolbar-enabled">
-    <%- include('partials/admin-signin-modal') %>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%- title %></title>
+  <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
+  <link rel="stylesheet" media="screen" href="vendor/simplebar/dist/simplebar.min.css" />
+  <link rel="stylesheet" media="screen" href="vendor/tiny-slider/dist/tiny-slider.css" />
+  <!-- Main Theme Styles + Bootstrap-->
+  <link rel="stylesheet" media="screen" href="css/theme.min.css" />
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+
+<body class="handheld-toolbar-enabled">
+  <%- include('partials/admin-signin-modal') %>
     <main class="page-wrapper">
       <header class="shadow-sm"><%-include('partials/admin-header') %></header>
       <!-- Dashboard header-->
       <div class="page-title-overlap bg-accent pt-4">
         <div
-          class="container d-flex flex-wrap flex-sm-nowrap justify-content-center justify-content-sm-between align-items-center pt-2"
-        >
+          class="container d-flex flex-wrap flex-sm-nowrap justify-content-center justify-content-sm-between align-items-center pt-2">
           <div class="d-flex align-items-center pb-3">
             <div class="ps-3">
-              <span class="d-block text-light fs-ms opacity-60 py-1"
-                >Hello,</span
-              >
+              <span class="d-block text-light fs-ms opacity-60 py-1">Hello,</span>
               <h3 class="text-light fs-lg mb-0">Admin!</h3>
             </div>
           </div>
@@ -45,12 +36,8 @@
             <aside class="col-lg-4 pe-xl-5">
               <!-- Account menu toggler (hidden on screens larger 992px)-->
               <div class="d-block d-lg-none p-4">
-                <a
-                  class="btn btn-outline-accent d-block"
-                  href="#account-menu"
-                  data-bs-toggle="collapse"
-                  ><i class="ci-menu me-2"></i>Account menu</a
-                >
+                <a class="btn btn-outline-accent d-block" href="#account-menu" data-bs-toggle="collapse"><i
+                    class="ci-menu me-2"></i>Account menu</a>
               </div>
               <!-- Actual menu-->
               <div class="h-100 border-end mb-2">
@@ -60,27 +47,18 @@
                   </div>
                   <ul class="list-unstyled mb-0">
                     <li class="border-bottom mb-0">
-                      <a
-                        class="nav-link-style d-flex align-items-center px-4 py-3"
-                        href="/admin-add-product"
-                        ><i class="ci-cloud-upload opacity-60 me-2"></i>Add New
-                        Product</a
-                      >
+                      <a class="nav-link-style d-flex align-items-center px-4 py-3" href="/admin-add-product"><i
+                          class="ci-cloud-upload opacity-60 me-2"></i>Add New
+                        Product</a>
                     </li>
                     <li class="border-bottom mb-0">
-                      <a
-                        class="nav-link-style d-flex align-items-center px-4 py-3 active"
-                        href="#"
-                        ><i class="ci-edit opacity-60 me-2"></i>Update a
-                        Product</a
-                      >
+                      <a class="nav-link-style d-flex align-items-center px-4 py-3 active" href="#"><i
+                          class="ci-edit opacity-60 me-2"></i>Update a
+                        Product</a>
                     </li>
                     <li class="mb-0">
-                      <a
-                        class="nav-link-style d-flex align-items-center px-4 py-3"
-                        href="account-signin.html"
-                        ><i class="ci-sign-out opacity-60 me-2"></i>Sign out</a
-                      >
+                      <a class="nav-link-style d-flex align-items-center px-4 py-3" href="account-signin.html"><i
+                          class="ci-sign-out opacity-60 me-2"></i>Sign out</a>
                     </li>
                   </ul>
                   <hr />
@@ -91,9 +69,7 @@
             <section class="col-lg-8 pt-lg-4 pb-4 mb-3">
               <div class="pt-2 px-4 ps-lg-0 pe-xl-5">
                 <!-- Title-->
-                <div
-                  class="d-sm-flex flex-wrap justify-content-between align-items-center pb-2"
-                >
+                <div class="d-sm-flex flex-wrap justify-content-between align-items-center pb-2">
                   <h2 class="h3 py-2 me-2 text-center text-sm-start">
                     Select Product
                   </h2>
@@ -114,166 +90,124 @@
                     </thead>
                     <tbody>
                       <% paginatedProducts.forEach(function(product) { %>
-                      <tr>
-                        <td scope="row"><%= product.id%></td>
-                        <td class="vertical-middle"><%- product.name %></td>
-                        <td class="vertical-middle"><%- product.category %></td>
-                        <td class="vertical-middle"><%- product.price %></td>
-                        <td class="vertical-middle"><%- product.sizes %></td>
-                        <td class="vertical-middle"><%- product.stock %></td>
-                        <td class="vertical-middle">
-                          <button
-                            class="btn btn-primary"
-                            onclick="viewModal(`<%- product.name %>`, `<%- product.category %>`, `<%- product.price %>`, `<%- product.sizes %>`, `<%- product.stock %>`, `<%- product.description %>`)"
-                          >
-                            View
-                          </button>
-                        </td>
-                      </tr>
-                      <% }); %>
+                        <tr>
+                          <td scope="row">
+                            <%= product.id%>
+                          </td>
+                          <td class="vertical-middle"><%- product.name %></td>
+                          <td class="vertical-middle"><%- product.category %></td>
+                          <td class="vertical-middle"><%- product.price %></td>
+                          <td class="vertical-middle"><%- product.sizes %></td>
+                          <td class="vertical-middle"><%- product.stock %></td>
+                          <td class="vertical-middle">
+                            <button class="btn btn-primary"
+                              onclick="viewModal(`<%- product.name %>`, `<%- product.category %>`, `<%- product.price %>`, `<%- product.sizes %>`, `<%- product.stock %>`, `<%- product.description %>`, `<%- product.id %>`)">
+                              View
+                            </button>
+                          </td>
+                        </tr>
+                        <% }); %>
                     </tbody>
                   </table>
                 </div>
                 <!-- Pagination-->
-                <nav
-                  class="d-flex justify-content-between pt-2 pb-3"
-                  aria-label="Page navigation"
-                >
+                <nav class="d-flex justify-content-between pt-2 pb-3" aria-label="Page navigation">
                   <ul class="pagination">
-                    <% if (page > 1) { %>
-                    <li class="page-item">
-                      <a
-                        class="page-link"
-                        href="/admin-update?page=<%= page - 1 %>"
-                        ><i class="ci-arrow-left me-2"></i>Prev</a
-                      >
-                    </li>
-                    <% } %>
+                    <% if (page> 1) { %>
+                      <li class="page-item">
+                        <a class="page-link" href="/admin-update?page=<%= page - 1 %>"><i
+                            class="ci-arrow-left me-2"></i>Prev</a>
+                      </li>
+                      <% } %>
                   </ul>
                   <ul class="pagination">
                     <li class="page-item d-sm-none">
-                      <span class="page-link page-link-static"
-                        ><%= page %> / <%= totalPages %></span
-                      >
+                      <span class="page-link page-link-static">
+                        <%= page %> / <%= totalPages %>
+                      </span>
                     </li>
-                    <% for (let i = 1; i <= totalPages; i++) { %>
-                    <li class="page-item <%= page === i ? 'active' : '' %>">
-                      <a class="page-link" href="/admin-update?page=<%= i %>"
-                        ><%= i %></a
-                      >
-                    </li>
-                    <% } %>
+                    <% for (let i=1; i <=totalPages; i++) { %>
+                      <li class="page-item <%= page === i ? 'active' : '' %>">
+                        <a class="page-link" href="/admin-update?page=<%= i %>">
+                          <%= i %>
+                        </a>
+                      </li>
+                      <% } %>
                   </ul>
                   <ul class="pagination">
                     <% if (page < totalPages) { %>
-                    <li class="page-item">
-                      <a
-                        class="page-link"
-                        href="/admin-update?page=<%= page + 1 %>"
-                        aria-label="Next"
-                        >Next<i class="ci-arrow-right ms-2"></i
-                      ></a>
-                    </li>
-                    <% } %>
+                      <li class="page-item">
+                        <a class="page-link" href="/admin-update?page=<%= page + 1 %>" aria-label="Next">Next<i
+                            class="ci-arrow-right ms-2"></i></a>
+                      </li>
+                      <% } %>
                   </ul>
                 </nav>
               </div>
 
               <!-- Modal -->
-              <div
-                class="modal fade"
-                id="viewModal"
-                tabindex="-1"
-                aria-labelledby="viewModal"
-                aria-hidden="true"
-              >
+              <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModal" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h1 class="modal-title fs-5" id="title">
                         Modify a Product
                       </h1>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                      <div class="mb-3">
-                        <label for="text-input" class="form-label"
-                          >Product Name</label
-                        >
-                        <input
-                          class="form-control"
-                          type="text"
-                          id="product-name"
-                        />
+                    <form action="/updateProduct" method="post">
+                      <input type="hidden" name="id" id="product-id">
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <label for="text-input" class="form-label">Product Name</label>
+                          <input class="form-control" type="text" id="product-name" name="name" />
+                        </div>
+
+                        <!-- SELECT MO DITO BY INDEX YUNG CURRENT CATEGORY -->
+                        <div class="mb-3">
+                          <label for="select-category" class="form-label">Category</label>
+                          <select class="form-select" id="select-category" name="category">
+                            <!-- POPULATE MO TO BASED SA DATABASE -->
+                            <option id="product-category"></option>
+                            <% categories.sort((a, b)=> { if (a === 'Accessories'
+                              || a === 'Others') return 1; if (b === 'Accessories'
+                              || b === 'Others') return -1; return 0; });
+                              categories.forEach(category => { %>
+                              <option value="<%- category.name %>"><%- category.name%></option>
+                              <% }); %>
+                          </select>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="product-price" class="form-label">Price
+                          </label>
+                          <input class="form-control" type="text" id="product-price" name="price" />
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="product-stock" class="form-label">Stock
+                          </label>
+                          <input class="form-control" type="text" id="product-stock" name="stock"/>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="textarea-description" class="form-label">Description
+                          </label>
+                          <textarea class="form-control" id="textarea-description" rows="5" name="description"></textarea>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                          Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                          Save changes
+                        </button>
                       </div>
 
-                      <!-- SELECT MO DITO BY INDEX YUNG CURRENT CATEGORY -->
-                      <div class="mb-3">
-                        <label for="select-category" class="form-label"
-                          >Category</label
-                        >
-                        <select class="form-select" id="select-category">
-                          <!-- POPULATE MO TO BASED SA DATABASE -->
-                          <option id="product-category"></option>
-                          <% categories.sort((a, b) => { if (a === 'Accessories'
-                          || a === 'Others') return 1; if (b === 'Accessories'
-                          || b === 'Others') return -1; return 0; });
-                          categories.forEach(category => { %>
-                          <option value="<%- category.name %>"><%- category.name%></option>
-                          <% }); %>
-                        </select>
-                      </div>
+                    </form>
 
-                      <div class="mb-3">
-                        <label for="product-price" class="form-label"
-                          >Price
-                        </label>
-                        <input
-                          class="form-control"
-                          type="text"
-                          id="product-price"
-                        />
-                      </div>
 
-                      <div class="mb-3">
-                        <label for="product-stock" class="form-label"
-                          >Stock
-                        </label>
-                        <input
-                          class="form-control"
-                          type="text"
-                          id="product-stock"
-                        />
-                      </div>
-
-                      <div class="mb-3">
-                        <label for="textarea-description" class="form-label"
-                          >Textarea
-                        </label>
-                        <textarea
-                          class="form-control"
-                          id="textarea-description"
-                          rows="5"
-                        ></textarea>
-                      </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                      >
-                        Close
-                      </button>
-                      <button type="button" class="btn btn-primary">
-                        Save changes
-                      </button>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -285,8 +219,10 @@
                   price,
                   sizes,
                   stock,
-                  description
+                  description,
+                  id
                 ) {
+                  $("#product-id").val(id);
                   $("#product-name").val(title);
                   $("#product-category").val(category).text(category);
                   $("#product-sizes").val(sizes);
@@ -304,16 +240,15 @@
     </main>
 
     <!-- Vendor scrits: js libraries and plugins-->
-    <script
-      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
       integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
     <script src="vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/simplebar/dist/simplebar.min.js"></script>
     <script src="vendor/tiny-slider/dist/min/tiny-slider.js"></script>
     <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
     <!-- Main theme script-->
     <script src="js/theme.min.js"></script>
-  </body>
+</body>
+
 </html>

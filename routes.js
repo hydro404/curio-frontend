@@ -199,6 +199,35 @@ router.post("/addProduct", upload.array('images', 3), (req, res) => {
       res.status(500).send("Internal Server Error");
     });
 });
+
+// update product
+router.post("/updateProduct", (req, res) => {
+  const cookieData = req.cookies.token;
+  console.log(cookieData);
+  console.log(req.body);
+  const { id, name, description, price, category, stock } = req.body;
+  axios
+    .put(
+      `${serverURL}/admin/products/${id}`,
+      {
+        name: name,
+        description: description,
+        price: price,
+        category: category,
+        stock: stock,
+      },
+      {
+        headers: { authorization: `${cookieData}` },
+      }
+    )
+    .then((response) => {
+      res.redirect("/admin-update");
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).send("Internal Server Error");
+    });
+});
 // // Calculate the total number of products in cart
 // const totalCartItems = cartItems.length;
 
