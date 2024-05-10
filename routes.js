@@ -11,6 +11,20 @@ require("dotenv").config();
 
 const cookieParser = require("cookie-parser");
 
+const multer  = require('multer')
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/img')
+  },
+  filename: function (req, file, cb) {
+    let extArray = file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
+    cb(null, file.fieldname + '-' + Date.now()+ '.' +extension)
+  }
+})
+const upload = multer({ storage: storage})
+
 const app = express();
 app.use(cookieParser());
 app.use(express.json());
@@ -157,6 +171,35 @@ router.post("/checkout", cartController.checkoutCart);
 
 router.post("/loginAdmin", userController.loginAdmin);
 router.post("/addProduct", adminController.addProduct);
+
+// update product
+router.post("/updateProduct", (req, res) => {
+  const cookieData = req.cookies.token;
+  console.log(cookieData);
+  console.log(req.body);
+  const { id, name, description, price, category, stock } = req.body;
+  axios
+    .put(
+      `${serverURL}/admin/products/${id}`,
+      {
+        name: name,
+        description: description,
+        price: price,
+        category: category,
+        stock: stock,
+      },
+      {
+        headers: { authorization: `${cookieData}` },
+      }
+    )
+    .then((response) => {
+      res.redirect("/admin-update");
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).send("Internal Server Error");
+    });
+});
 // // Calculate the total number of products in cart
 // const totalCartItems = cartItems.length;
 

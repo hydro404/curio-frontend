@@ -21,4 +21,7 @@ const filterProducts = (req, res) => {
     });
 };
 
+// admin add product
+
+
 module.exports = { filterProducts };

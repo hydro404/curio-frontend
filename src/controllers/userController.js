@@ -141,6 +141,8 @@ const loginAdmin = async (req, res) => {
         return res.status(400).send('Email and password are required.');
     }
 
+    console.log(req.body);
+
     axios.post(`${SERVER_URL}/admin/login`, {
         username: username,
         password: password
@@ -151,6 +153,7 @@ const loginAdmin = async (req, res) => {
                 message: 'Sign-in successful',
                 token: response.data.token
             });
+
         } else {
             // handle cases where response from auth server does not contain a token
             res.status(401).send('Invalid credentials');
