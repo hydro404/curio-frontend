@@ -97,7 +97,7 @@
                     Add New Product
                   </h2>
                 </div>
-                <form>
+                <form id="add-product-form">
                   <div class="mb-3 pb-2">
                     <label class="form-label" for="unp-product-name"
                       >Product name</label
@@ -106,6 +106,7 @@
                       class="form-control"
                       type="text"
                       id="unp-product-name"
+                      name="name"
                     />
                     <div class="form-text">
                       Maximum 100 characters. No HTML or emoji allowed.
@@ -115,23 +116,30 @@
                     <label class="form-label" for="unp-product-category"
                       >Category</label
                     >
-                    <input
+                    <!-- <input
                       class="form-control"
                       type="text"
                       id="unp-product-category"
-                    />
+                    /> -->
+                    <select class="form-select" id="unp-product-category" name="category">
+                      <% categories.forEach(function(category, index) { %>
+                        <% if (index !== 0) { %> <!-- Skip the first category -->
+                          <option value="<%= category.name %>"><%= category.name %></option>
+                        <% } %>
+                      <% }); %>
+                    </select>
                     <div class="form-text">
                       Maximum 100 characters. No HTML or emoji allowed.
                     </div>
                   </div>
                   <div class="mb-3 pb-2">
                     <label class="form-label" for="unp-product-category"
-                      >Sizes</label
+                      >Variation</label
                     >
                     <input
                       class="form-control"
                       type="text"
-                      id="unp-product-category"
+                      id="unp-product-variation"
                     />
                     <div class="form-text">
                       Example: S,M,L; if single size, put S.
@@ -145,6 +153,7 @@
                       class="form-control"
                       type="file"
                       id="unp-product-files"
+                      name="images"
                     />
                   </div>
                   <div class="mb-3 py-2">
@@ -155,6 +164,7 @@
                       class="form-control"
                       rows="6"
                       id="unp-product-description"
+                      name="description"
                     ></textarea>
                   </div>
                   <div class="row mb-3">
@@ -165,6 +175,7 @@
                           class="form-control"
                           type="text"
                           id="unp-stock"
+                          name="stock"
                         />
                       </div>
                     </div>
@@ -176,6 +187,7 @@
                           class="form-control"
                           type="text"
                           id="unp-price"
+                          name="price"
                         />
                       </div>
                     </div>
@@ -194,11 +206,14 @@
     </main>
 
     <!-- Vendor scrits: js libraries and plugins-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/simplebar/dist/simplebar.min.js"></script>
     <script src="vendor/tiny-slider/dist/min/tiny-slider.js"></script>
     <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
     <!-- Main theme script-->
     <script src="js/theme.min.js"></script>
+    <script src="js/modifyProducts.js"></script>
   </body>
 </html>

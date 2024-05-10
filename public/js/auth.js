@@ -199,12 +199,26 @@ if(signinForm){
                     });
                 } else {
                     // Handle cases where the token is not present in the response
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Invalid credentials",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                     $('#error-message').text('Sign-in failed, token not provided.');
                     $('#error-message').addClass('d-block');
                 }
             },
             error: (error) => {
                 console.log(error)
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Invalid credentials",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 $('#error-message').text('Invalid credentials');
                 $('#error-message').addClass('d-block');
             }

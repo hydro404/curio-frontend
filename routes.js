@@ -5,6 +5,7 @@ const wishlist = require("./wishlist-items");
 const userController = require("./src/controllers/userController");
 const cartController = require("./src/controllers/cartController");
 const productController = require("./src/controllers/productController");
+const adminController = require("./src/controllers/adminController");
 const axios = require("axios");
 require("dotenv").config();
 
@@ -155,6 +156,7 @@ router.put("/updateCart", cartController.updateCart);
 router.post("/checkout", cartController.checkoutCart);
 
 router.post("/loginAdmin", userController.loginAdmin);
+router.post("/addProduct", adminController.addProduct);
 // // Calculate the total number of products in cart
 // const totalCartItems = cartItems.length;
 
@@ -381,10 +383,22 @@ router.get("/admin", (req, res) => {
   });
 });
 
-router.get("/admin-add-product", (req, res) => {
+router.get("/admin-add-product", getUserDetailsMiddleware, (req, res) => {
+
   res.render("admin-add-products", {
     title: "Admin | Curio 4552",
+    categories: res.locals.categories,
   });
+
+});
+
+router.get("/dashboard", getUserDetailsMiddleware, (req, res) => {
+
+  res.render("admin-dashboard", {
+    title: "Admin | Curio 4552",
+    categories: res.locals.categories,
+  });
+
 });
 
 router.get("/admin-update", getUserDetailsMiddleware, (req, res) => {
