@@ -97,7 +97,7 @@
                     Add New Product
                   </h2>
                 </div>
-                <form>
+                <form action="/addProduct" enctype="multipart/form-data" method="post">
                   <div class="mb-3 pb-2">
                     <label class="form-label" for="unp-product-name"
                       >Product name</label
@@ -106,6 +106,7 @@
                       class="form-control"
                       type="text"
                       id="unp-product-name"
+                      name="name"
                     />
                     <div class="form-text">
                       Maximum 100 characters. No HTML or emoji allowed.
@@ -119,6 +120,7 @@
                       class="form-control"
                       type="text"
                       id="unp-product-category"
+                      name="category"
                     />
                     <div class="form-text">
                       Maximum 100 characters. No HTML or emoji allowed.
@@ -132,6 +134,7 @@
                       class="form-control"
                       type="text"
                       id="unp-product-category"
+                      name="sizes"
                     />
                     <div class="form-text">
                       Example: S,M,L; if single size, put S.
@@ -145,6 +148,7 @@
                       class="form-control"
                       type="file"
                       id="unp-product-files"
+                      name="images"
                     />
                   </div>
                   <div class="mb-3 py-2">
@@ -155,6 +159,7 @@
                       class="form-control"
                       rows="6"
                       id="unp-product-description"
+                      name="description"
                     ></textarea>
                   </div>
                   <div class="row mb-3">
@@ -165,6 +170,7 @@
                           class="form-control"
                           type="text"
                           id="unp-stock"
+                          name="stock"
                         />
                       </div>
                     </div>
@@ -176,6 +182,7 @@
                           class="form-control"
                           type="text"
                           id="unp-price"
+                          name="price"
                         />
                       </div>
                     </div>
