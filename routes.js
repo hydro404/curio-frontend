@@ -163,12 +163,6 @@ const getAdminDetailsMiddleware = (req, res, next) => {
   const cookieData = req.cookies.token;
   // console.log(cookieData);
   res.locals.loggedIn = false;
-  const config = {
-    headers: {
-      Authorization: `${cookieData}`,
-    },
-  };
-
   if (cookieData) {
     // console.log(cookieData);
     axios
@@ -176,8 +170,10 @@ const getAdminDetailsMiddleware = (req, res, next) => {
         headers: { Authorization: `${cookieData}` },
       }).then((response) => {
         res.locals.orders = response.data;
+        next();
       }).catch((error) => {
         console.error(error);
+        next();
       });
 
     }
@@ -496,30 +492,29 @@ router.get("/admin-update", getUserDetailsMiddleware, (req, res) => {
 });
 
 
-router.get("/manage-orders", getUserDetailsMiddleware, getAdminDetailsMiddleware, (req, res) => {
+router.get("/manage-orders", getAdminDetailsMiddleware, (req, res) => {
   var cookieData = req.cookies.token;
   try {
     const page = parseInt(req.query.page) || 1; // Current page, default is 1
     const pageSize = 100; // Number of items per page
     // const product_category = req.query.product_category; // Retrieve product-category value from request
     const totalPages = 1;
-    axios.get(`${serverURL}/admin/orders`, { headers: { Authorization: `${cookieData}` },}
-    ).then((response) => {
-      const orders = response.data;
-      console.log(orders);
-      res.render("admin-orders", {
-        title: "Admin | Curio 4552",
-        orders: orders,
-        paginatedOrders: res.locals.paginatedProducts,
-        paginatedProducts: res.locals.products,
-        page: page,
-        totalPages: totalPages,
-        categories: res.locals.categories,
-        product_category: res.locals.categories,
-        paginatedOrders: res.locals.orders
-      });
-      
+    res.render("admin-orders", {
+      title: "Admin | Curio 4552",
+      orders: orders,
+      paginatedProducts: [],
+      page: page,
+      totalPages: totalPages,
+      paginatedOrders: res.locals.orders
     });
+  //   axios.get(`${serverURL}/admin/orders`, { headers: { Authorization: `${cookieData}` },}
+  //   ).then((response) => {
+  //     const orders = response.data;
+  //     console.log(orders);
+
+      
+      
+  //   });
   } catch (error) {
     // If there's an error, return an error response
     console.error(error);

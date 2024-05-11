@@ -102,18 +102,18 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <% paginatedOrders.forEach(function(order) { %>
+                      <% paginatedOrders.forEach(function(order, index) { %>
                         <tr style="vertical-align: middle;">
                           <td scope="row">
-                            <%= order.id%>
+                            <%= order.index%>
                           </td>
-                          <td class="vertical-middle"><%- order.name %></td>
-                          <td class="vertical-middle d-none d-md-table-cell"><%- order.category %></td>
-                          <td class="vertical-middle d-none d-md-table-cell"><%- order.price %></td>
-                          <td class="vertical-middle d-none d-md-table-cell"><%- order.variation %></td>
+                          <td class="vertical-middle"><%- order.id %></td>
+                          <td class="vertical-middle d-none d-md-table-cell"><%- order.date %></td>
+                          <td class="vertical-middle d-none d-md-table-cell"><%- order.status %></td>
+                          <td class="vertical-middle d-none d-md-table-cell"><%- order.total %></td>
                           <td class="vertical-middle g-2" >
-                              <button class="btn btn-primary px-4 py-1 mb-2" onclick="viewModal(`<%- order.name %>`, `<%- order.category %>`, `<%- order.price %>`, `<%- order.sizes %>`, `<%- order.stock %>`, `<%- order.description %>`, `<%- order.id %>`)"> &nbsp;View &nbsp;</button>
-                              <button class="btn btn-outline-primary px-4 py-1" onclick="deleteModal(`<%- order.id %>`, `<%- order.name %>`)">Cancel</button>
+                              <button class="btn btn-primary px-4 py-1 mb-2" onclick="viewModal(`<%- order.id %>`, `<%- order.date %>`, `<%- order.status %>`, `<%- order.total %>`)"> &nbsp;View &nbsp;</button>
+                              <button class="btn btn-outline-primary px-4 py-1" onclick="deleteModal(`<%- order.id %>`, `<%- order.total %>`)">Cancel</button>
                           </td>
                         </tr>
                         <% }); %>
@@ -153,69 +153,6 @@
                       <% } %>
                   </ul>
                 </nav>
-              </div>
-
-              <!-- Modal -->
-              <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModal" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="title">
-                        Modify a Product
-                      </h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="/updateProduct" method="post">
-                      <input type="hidden" name="id" id="product-id">
-                      <div class="modal-body">
-                        <div class="mb-3">
-                          <label for="text-input" class="form-label">Product Name</label>
-                          <input class="form-control" type="text" id="product-name" name="name" />
-                        </div>
-
-                        <!-- SELECT MO DITO BY INDEX YUNG CURRENT CATEGORY -->
-                        <div class="mb-3">
-                          <label for="select-category" class="form-label">Category</label>
-                          <select class="form-select" id="select-category" name="category">
-                            <!-- POPULATE MO TO BASED SA DATABASE -->
-                            <option id="product-category"></option>
-                            <% categories.sort((a, b)=> { if (a === 'Accessories'
-                              || a === 'Others') return 1; if (b === 'Accessories'
-                              || b === 'Others') return -1; return 0; });
-                              categories.forEach(category => { %>
-                              <option value="<%- category.name %>"><%- category.name%></option>
-                              <% }); %>
-                          </select>
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="product-price" class="form-label">Price
-                          </label>
-                          <input class="form-control" type="text" id="product-price" name="price" />
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="product-stock" class="form-label">Stock
-                          </label>
-                          <input class="form-control" type="text" id="product-stock" name="stock"/>
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="textarea-description" class="form-label">Description
-                          </label>
-                          <textarea class="form-control" id="textarea-description" rows="5" name="description"></textarea>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                          Close
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                          Save changes
-                        </button>
-                      </div>
-                  </div>
-                </div>
               </div>
 
               <div
