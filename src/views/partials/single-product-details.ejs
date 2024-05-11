@@ -18,7 +18,7 @@
           <label class="form-label" for="product-variation">Variation:</label>
         </div>
         <select class="form-select" required id="product-variation">
-          <% var variations = JSON.parse(product[0].variation); %>
+          <% var variations = product[0].variation %>
           <% variations.forEach(variation => { %>
             <option value="<%= variation %>"><%= variation %></option>
           <% }); %>
