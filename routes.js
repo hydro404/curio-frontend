@@ -159,6 +159,31 @@ const getUserDetailsMiddleware = (req, res, next) => {
   }
 };
 
+const getAdminDetailsMiddleware = (req, res, next) => {
+  const cookieData = req.cookies.token;
+  // console.log(cookieData);
+  res.locals.loggedIn = false;
+  const config = {
+    headers: {
+      Authorization: `${cookieData}`,
+    },
+  };
+
+  if (cookieData) {
+    // console.log(cookieData);
+    axios
+      .get(`${serverURL}/admin/orders`, {
+        headers: { Authorization: `${cookieData}` },
+      }).then((response) => {
+        res.locals.orders = response.data;
+      }).catch((error) => {
+        console.error(error);
+      });
+
+    }
+
+};
+
 router.post("/signin", userController.signIn);
 router.post("/signup", userController.signUp);
 router.post("/addToCart", cartController.addToCart);
@@ -467,7 +492,7 @@ router.get("/admin-update", getUserDetailsMiddleware, (req, res) => {
 });
 
 
-router.get("/manage-orders", getUserDetailsMiddleware, (req, res) => {
+router.get("/manage-orders", getUserDetailsMiddleware, getAdminDetailsMiddleware, (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1; // Current page, default is 1
     const pageSize = 100; // Number of items per page
@@ -481,6 +506,7 @@ router.get("/manage-orders", getUserDetailsMiddleware, (req, res) => {
       totalPages: totalPages,
       categories: res.locals.categories,
       product_category: res.locals.categories,
+      paginatedOrders: res.locals.orders
     });
   } catch (error) {
     // If there's an error, return an error response

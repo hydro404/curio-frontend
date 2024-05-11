@@ -102,18 +102,18 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <% paginatedProducts.forEach(function(product) { %>
+                      <% paginatedOrders.forEach(function(order) { %>
                         <tr style="vertical-align: middle;">
                           <td scope="row">
-                            <%= product.id%>
+                            <%= order.id%>
                           </td>
-                          <td class="vertical-middle"><%- product.name %></td>
-                          <td class="vertical-middle d-none d-md-table-cell"><%- product.category %></td>
-                          <td class="vertical-middle d-none d-md-table-cell"><%- product.price %></td>
-                          <td class="vertical-middle d-none d-md-table-cell"><%- product.variation %></td>
+                          <td class="vertical-middle"><%- order.name %></td>
+                          <td class="vertical-middle d-none d-md-table-cell"><%- order.category %></td>
+                          <td class="vertical-middle d-none d-md-table-cell"><%- order.price %></td>
+                          <td class="vertical-middle d-none d-md-table-cell"><%- order.variation %></td>
                           <td class="vertical-middle g-2" >
-                              <button class="btn btn-primary px-4 py-1 mb-2" onclick="viewModal(`<%- product.name %>`, `<%- product.category %>`, `<%- product.price %>`, `<%- product.sizes %>`, `<%- product.stock %>`, `<%- product.description %>`, `<%- product.id %>`)"> &nbsp;View &nbsp;</button>
-                              <button class="btn btn-outline-primary px-4 py-1" onclick="deleteModal(`<%- product.id %>`, `<%- product.name %>`)">Cancel</button>
+                              <button class="btn btn-primary px-4 py-1 mb-2" onclick="viewModal(`<%- order.name %>`, `<%- order.category %>`, `<%- order.price %>`, `<%- order.sizes %>`, `<%- order.stock %>`, `<%- order.description %>`, `<%- order.id %>`)"> &nbsp;View &nbsp;</button>
+                              <button class="btn btn-outline-primary px-4 py-1" onclick="deleteModal(`<%- order.id %>`, `<%- order.name %>`)">Cancel</button>
                           </td>
                         </tr>
                         <% }); %>
