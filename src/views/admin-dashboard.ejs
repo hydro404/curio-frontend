@@ -113,12 +113,25 @@
                   </h2>
                 </div>
                 <div class="row g-3">
+
+                  <div class="row g-2">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                            <h5 class="card-title">Total Sales</h5>
+                                <p class="card-text">₱ <%= (dashboardData.totalSales).toFixed(2) %></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
                     <div class="row g-2">
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-body">
                                 <h5 class="card-title">Completed Transactions</h5>
-                                    <p class="card-text">0</p>
+                                    <p class="card-text"><%= dashboardData.completedOrders %></p>
                                 </div>
                             </div>
                         </div>
@@ -126,7 +139,7 @@
                             <div class="card">
                                 <div class="card-body">
                                 <h5 class="card-title">Pending Transactions</h5>
-                                    <p class="card-text">0</p>
+                                    <p class="card-text"><%= dashboardData.pendingOrders %></p>
                                 </div>
                             </div>
                         </div>
@@ -135,38 +148,20 @@
                             <div class="card">
                                 <div class="card-body">
                                 <h5 class="card-title">Cancelled Transactions</h5>
-                                    <p class="card-text">0</p>
+                                    <p class="card-text"><%= dashboardData.cancelledOrders %></p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                <h5 class="card-title">Total Sales</h5>
-                                    <p class="card-text">0</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                <h5 class="card-title">Total Refunds</h5>
-                                    <p class="card-text">0</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
 
                     <div class="row g-2">
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-body">
                                 <h5 class="card-title">Total Products</h5>
-                                    <p class="card-text">0</p>
+                                    <p class="card-text"><%= dashboardData.totalProducts %></p>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +169,7 @@
                             <div class="card">
                                 <div class="card-body">
                                 <h5 class="card-title">Total Stocks</h5>
-                                    <p class="card-text">0</p>
+                                    <p class="card-text"><%= dashboardData.totalStocks %></p>
                                 </div>
                             </div>
                         </div>
@@ -183,35 +178,7 @@
                             <div class="card">
                                 <div class="card-body">
                                 <h5 class="card-title">Total Categories</h5>
-                                    <p class="card-text">0</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row g-2">
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                <h5 class="card-title">Completed Transactions</h5>
-                                    <p class="card-text">0</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                <h5 class="card-title">Pending Transactions</h5>
-                                    <p class="card-text">0</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                <h5 class="card-title">Cancelled Transactions</h5>
-                                    <p class="card-text">0</p>
+                                    <p class="card-text"><%= dashboardData.totalCategories %></p>
                                 </div>
                             </div>
                         </div>

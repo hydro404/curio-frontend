@@ -80,7 +80,7 @@
               </div>
             </aside>
             <!-- Content-->
-            <section class="col-lg-8 pt-lg-4 pb-4 mb-3">
+            <section class="col-lg-8 pt-lg-4 pb-4 mb-3" >
               <div class="pt-2 px-4 ps-lg-0 pe-xl-5">
                 <!-- Title-->
                 <div class="d-sm-flex flex-wrap justify-content-between align-items-center pb-2">
@@ -89,7 +89,7 @@
                   </h2>
                 </div>
                 <!-- Light table with hoverable rows -->
-                <div class="table-responsive" style="max-height: 60vh !important;">
+                <div class="table-responsive" style="min-height: 70vh !important;">
                   <table class="table table-striped">
                     <thead>
                       <tr>
@@ -107,13 +107,15 @@
                           <td scope="row">
                             <%= order.index%>
                           </td>
-                          <td class="vertical-middle"><%- order.id %></td>
+                          <td class="vertical-middle">CURIO<%- order.id %></td>
                           <td class="vertical-middle d-none d-md-table-cell"><%- order.date %></td>
                           <td class="vertical-middle d-none d-md-table-cell"><%- order.status %></td>
                           <td class="vertical-middle d-none d-md-table-cell"><%- order.total %></td>
-                          <td class="vertical-middle g-2" >
-                              <button class="btn btn-primary px-4 py-1 mb-2" onclick="viewModal(`<%- order.id %>`, `<%- order.date %>`, `<%- order.status %>`, `<%- order.total %>`)"> &nbsp;View &nbsp;</button>
-                              <button class="btn btn-outline-primary px-4 py-1" onclick="deleteModal(`<%- order.id %>`, `<%- order.total %>`)">Cancel</button>
+                          <td class="vertical-middle g-2 row" >
+                              <button class="btn btn-primary px-4 py-1 mb-2 mb-md-0" onclick="viewModal(`<%- order.id %>`, `<%- order.date %>`, `<%- order.status %>`, `<%- order.total %>`)"> &nbsp;View &nbsp;</button>
+                              <% if (order.status === 'Pending') { %>
+                                <button class="btn btn-outline-primary px-4 py-1" onclick="deleteModal(`<%- order.id %>`)">Cancel</button>
+                              <% } %>
                           </td>
                         </tr>
                         <% }); %>
@@ -176,8 +178,8 @@
                       ></button>
                     </div>
                     <div class="modal-body">
-                      Are you sure that you want to delete
-                      <span id="product-name2"></span>?
+                      Are you sure that you want to cancel the order with the order number
+                      CURIO<span id="order-number"></span>?
                     </div>
                     <div class="modal-footer">
                       <button
@@ -199,33 +201,10 @@
                 </div>
               </div>
 
-
               <script>
-                function viewModal(
-                  title,
-                  category,
-                  price,
-                  sizes,
-                  stock,
-                  description,
-                  id
-                ) {
-                  $("#product-id").val(id);
-                  $("#product-name").val(title);
-                  var selectElement = document.getElementById('select-category');
-                  selectElement.value = category;
-                  $("#product-sizes").val(sizes);
-                  $("#product-price").val(price);
-                  $("#product-stock").val(stock);
-                  $("#textarea-description").text(description);
-                  $("#viewModal").modal("show");
-                }
-              </script>
-
-              <script>
-                function deleteModal(id, name) {
-                  $('#product-name2').text(name);
-                  $('#confirm-delete').attr('onclick', `deleteProduct('${id}')`);
+                function deleteModal(id) {
+                  $('#order-number').text(id);
+                  $('#confirm-delete').attr('onclick', `cancelOrder('${id}', 'Cancelled')`);
                   $("#deleteModal").modal("show");
                 }
               </script>
@@ -237,6 +216,8 @@
     </main>
 
     <!-- Vendor scrits: js libraries and plugins-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
       integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
       crossorigin="anonymous"></script>
@@ -246,6 +227,7 @@
     <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
     <!-- Main theme script-->
     <script src="js/theme.min.js"></script>
+    <script src="js/adminOrder.js"></script>
 </body>
 
 </html>

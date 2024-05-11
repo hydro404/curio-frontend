@@ -6,6 +6,7 @@ const userController = require("./src/controllers/userController");
 const cartController = require("./src/controllers/cartController");
 const productController = require("./src/controllers/productController");
 const adminController = require("./src/controllers/adminController");
+const orderController = require("./src/controllers/orderController");
 const axios = require("axios");
 require("dotenv").config();
 
@@ -192,6 +193,8 @@ router.post("/checkout", cartController.checkoutCart);
 
 router.post("/loginAdmin", userController.loginAdmin);
 router.post("/addProduct",upload.array('images', 3), adminController.addProduct);
+
+router.put("/approveCancelOrder", orderController.approveCancelOrder);
 
 // update product
 router.post("/updateProduct", (req, res) => {
@@ -462,9 +465,17 @@ router.get("/admin-add-product", getUserDetailsMiddleware, (req, res) => {
 
 router.get("/dashboard", getUserDetailsMiddleware, (req, res) => {
 
-  res.render("admin-dashboard", {
-    title: "Admin | Curio 4552",
-    categories: res.locals.categories,
+  const cookieData = req.cookies.token;
+
+  axios.get(`${serverURL}/admin/dashboard`, { headers: { Authorization: `${cookieData}` },}
+  ).then((response) => {
+    const dashboardData = response.data;
+    console.log(dashboardData);
+    res.render("admin-dashboard", {
+      title: "Admin | Curio 4552",
+      categories: res.locals.categories,
+      dashboardData: dashboardData,
+    });
   });
 
 });
