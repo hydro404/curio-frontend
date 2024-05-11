@@ -164,20 +164,26 @@ const getAdminDetailsMiddleware = (req, res, next) => {
   const cookieData = req.cookies.token;
   // console.log(cookieData);
   res.locals.loggedIn = false;
+  res.locals.admin = false;
+  
   if (cookieData) {
-    // console.log(cookieData);
     axios
       .get(`${serverURL}/admin/orders`, {
         headers: { Authorization: `${cookieData}` },
       }).then((response) => {
         res.locals.orders = response.data;
+        res.locals.admin = true;
         next();
       }).catch((error) => {
         console.error(error);
+        res.locals.admin = false;
         next();
       });
 
-    }
+  } else {
+    res.locals.admin = false;
+    next();
+  }
 
 };
 
@@ -195,6 +201,7 @@ router.post("/loginAdmin", userController.loginAdmin);
 router.post("/addProduct",upload.array('images', 3), adminController.addProduct);
 
 router.put("/approveCancelOrder", orderController.approveCancelOrder);
+router.put("/approveCancelOrder2", orderController.approveCancelOrder2);
 
 // update product
 router.post("/updateProduct", (req, res) => {
@@ -228,6 +235,29 @@ router.post("/updateProduct", (req, res) => {
       res.status(500).send("Internal Server Error");
     });
 });
+
+
+router.delete("/deleteProduct", (req, res) => {
+  const cookieData = req.cookies.token;
+  const { id } = req.body;
+  axios
+    .delete(
+      `${serverURL}/admin/products/${id}`,
+      {
+        headers: { Authorization: `${cookieData}` },
+      }
+    )
+    .then((response) => {
+      res.status(200).json({
+        status: "success",
+        message: "Product updated successfully",
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).send("Internal Server Error");
+    });
+});
 // // Calculate the total number of products in cart
 // const totalCartItems = cartItems.length;
 
@@ -242,6 +272,18 @@ router.post("/updateProduct", (req, res) => {
 
 router.get("/", getUserDetailsMiddleware, (req, res) => {
   res.render("index", {
+    title: "Home | Curio 4552",
+    products: res.locals.topProducts,
+    totalProducts: res.locals.totalProducts,
+    cartItems: res.locals.cartItems,
+    totalCartItems: res.locals.totalCartItems,
+    loggedIn: res.locals.loggedIn,
+    categories: res.locals.categories,
+  });
+});
+
+router.get("/contact", getUserDetailsMiddleware, (req, res) => {
+  res.render("contact", {
     title: "Home | Curio 4552",
     products: res.locals.topProducts,
     totalProducts: res.locals.totalProducts,
@@ -448,88 +490,129 @@ router.get("/account-login", getUserDetailsMiddleware, (req, res) => {
   });
 });
 
-router.get("/admin", (req, res) => {
-  res.render("admin-index", {
+router.get("/admin", getAdminDetailsMiddleware, (req, res) => {
+  if(res.locals.admin){
+    res.redirect("/dashboard");
+  }
+  else{
+    res.render("admin-index", {
     title: "Admin | Curio 4552",
-  });
+  }); 
+  }
+  
 });
 
-router.get("/admin-add-product", getUserDetailsMiddleware, (req, res) => {
-
-  res.render("admin-add-products", {
-    title: "Admin | Curio 4552",
-    categories: res.locals.categories,
-  });
+router.get("/admin-add-product", getAdminDetailsMiddleware, (req, res) => {
+  if(res.locals.admin){
+    axios.get(`${serverURL}/categories`).then((response) => {
+      const categories = response.data;
+      res.locals.categories = categories;
+      res.render("admin-add-products", {
+        title: "Admin | Curio 4552",
+        categories: res.locals.categories,
+      });
+    });
+    
+  }
+  else{
+    res.redirect("/admin");
+  }
 
 });
 
-router.get("/dashboard", getUserDetailsMiddleware, (req, res) => {
+router.get("/dashboard", getAdminDetailsMiddleware, (req, res) => {
 
   const cookieData = req.cookies.token;
 
-  axios.get(`${serverURL}/admin/dashboard`, { headers: { Authorization: `${cookieData}` },}
-  ).then((response) => {
-    const dashboardData = response.data;
-    console.log(dashboardData);
-    res.render("admin-dashboard", {
-      title: "Admin | Curio 4552",
-      categories: res.locals.categories,
-      dashboardData: dashboardData,
+  if(res.locals.admin){
+    axios.get(`${serverURL}/admin/dashboard`, { headers: { Authorization: `${cookieData}` },}
+    ).then((response) => {
+      const dashboardData = response.data;
+      console.log(dashboardData);
+      res.render("admin-dashboard", {
+        title: "Admin | Curio 4552",
+        dashboardData: dashboardData,
+      });
     });
-  });
+  }
+  else{
+    res.redirect("/admin");
+  }
+
+  
 
 });
 
-router.get("/admin-update", getUserDetailsMiddleware, (req, res) => {
-  try {
-    const page = parseInt(req.query.page) || 1; // Current page, default is 1
-    const pageSize = 100; // Number of items per page
-    // const product_category = req.query.product_category; // Retrieve product-category value from request
-    const totalPages = 1;
-    res.render("admin-update", {
-      title: "Admin | Curio 4552",
-      products: res.locals.products,
-      paginatedProducts: res.locals.products,
-      page: page,
-      totalPages: totalPages,
-      categories: res.locals.categories,
-      product_category: res.locals.categories,
-    });
-  } catch (error) {
-    // If there's an error, return an error response
-    console.error(error);
-    res.status(500).send("Internal Server Error");
+router.get("/admin-update", getAdminDetailsMiddleware, (req, res) => {
+  if(res.locals.admin){
+    
+    try {
+      const page = parseInt(req.query.page) || 1; // Current page, default is 1
+      const pageSize = 100; // Number of items per page
+      // const product_category = req.query.product_category; // Retrieve product-category value from request
+      const totalPages = 1;
+      axios.get(`${serverURL}/categories`).then((response) => {
+        const categories = response.data;
+        res.locals.categories = categories;
+      }).then(() => {
+        return axios
+        .get(`${serverURL}/products`)
+        .then((response) => {
+          res.locals.products = response.data;
+          var products = response.data;
+          res.locals.totalProducts = products.length;
+          res.locals.topProducts = products.slice(0, 8);
+          res.render("admin-update", {
+            title: "Admin | Curio 4552",
+            products: res.locals.products,
+            paginatedProducts: res.locals.products,
+            page: page,
+            totalPages: totalPages,
+            categories: res.locals.categories,
+            product_category: res.locals.categories,
+          });
+        })
+      });
+      
+    } catch (error) {
+      // If there's an error, return an error response
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+  else{
+    res.redirect("/admin");
   }
 });
 
 
 router.get("/manage-orders", getAdminDetailsMiddleware, (req, res) => {
   var cookieData = req.cookies.token;
-  try {
-    const page = parseInt(req.query.page) || 1; // Current page, default is 1
-    const pageSize = 100; // Number of items per page
-    // const product_category = req.query.product_category; // Retrieve product-category value from request
-    const totalPages = 1;
-    res.render("admin-orders", {
-      title: "Admin | Curio 4552",
-      orders: orders,
-      paginatedProducts: [],
-      page: page,
-      totalPages: totalPages,
-      paginatedOrders: res.locals.orders
-    });
-  //   axios.get(`${serverURL}/admin/orders`, { headers: { Authorization: `${cookieData}` },}
-  //   ).then((response) => {
-  //     const orders = response.data;
-  //     console.log(orders);
+  console.log(cookieData)
 
-      
-      
-  //   });
-  } catch (error) {
-    // If there's an error, return an error response
-    console.error(error);
-    res.status(500).send("Internal Server Error");
+  if(res.locals.admin){
+    try {
+      const page = parseInt(req.query.page) || 1; // Current page, default is 1
+      const pageSize = 100; // Number of items per page
+      // const product_category = req.query.product_category; // Retrieve product-category value from request
+      const totalPages = 1;
+      res.render("admin-orders", {
+        title: "Admin | Curio 4552",
+        orders: orders,
+        paginatedProducts: [],
+        page: page,
+        totalPages: totalPages,
+        paginatedOrders: res.locals.orders
+      });
+    } catch (error) {
+      // If there's an error, return an error response
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+      res.redirect("/admin");
+    }
+  }
+  else{
+    res.redirect("/admin");
   }
 });
 

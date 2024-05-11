@@ -29,7 +29,7 @@ function checkout(){
         var payment = selectedRadio.value;
     }
     var total = document.getElementById('orderTotal').value;
-    total = parseFloat(total) + 60.00;
+    total = parseFloat(total);
 
     var data = {
         firstname: fn,

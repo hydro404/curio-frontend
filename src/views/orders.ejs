@@ -43,6 +43,8 @@
       ><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span
       ><i class="btn-scroll-top-icon ci-arrow-up"> </i
     ></a>
+
+
     <!-- Vendor scrits: js libraries and plugins-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -50,6 +52,20 @@
     <script src="vendor/simplebar/dist/simplebar.min.js"></script>
     <script src="vendor/tiny-slider/dist/min/tiny-slider.js"></script>
     <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+
+    <script>
+      function cancelModal(id) {
+        $('#order-number').text(id);
+        $('#confirm-delete').attr('onclick', `cancelOrder('${id}', 'Cancelled')`);
+        $("#deleteModal").modal("show");
+      }
+
+      function completeModal(id) {
+        $('#order-number2').text(id);
+        $('#confirm-authorize').attr('onclick', `completeOrder('${id}', 'Completed')`);
+        $("#authorizeModal").modal("show");
+      }
+    </script>
     <!-- Main theme script-->
     <script src="js/theme.min.js"></script>
     <script src="js/auth.js"></script>

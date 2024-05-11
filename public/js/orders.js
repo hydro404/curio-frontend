@@ -31,3 +31,57 @@ function seeOrder(object){
     });
     $('#order-details').modal('show');
 }
+
+
+function completeOrder(id, status){
+  $.ajax({
+      url: '/approveCancelOrder2',
+      type: 'PUT',
+      data: {id, status},
+      success: function(result){
+          if(result.status === 'success'){
+              Swal.fire ({
+                  title: 'Order Completed!',
+                  icon: 'success',
+                  timer: 1500,
+              }).then(() => {
+                  window.location.reload();
+              });
+          }
+      },
+      error: function(error){
+          console.log(error);
+          Swal.fire({
+              title: 'Something went wrong',
+              icon: 'error'
+          });
+      }
+  });
+}
+
+
+function cancelOrder(id, status){
+  $.ajax({
+      url: '/approveCancelOrder2',
+      type: 'PUT',
+      data: {id, status},
+      success: function(result){
+          if(result.status === 'success'){
+              Swal.fire ({
+                  title: 'Order Cancelled',
+                  icon: 'success',
+                  timer: 1500,
+              }).then(() => {
+                  window.location.reload();
+              });
+          }
+      },
+      error: function(error){
+          console.log(error);
+          Swal.fire({
+              title: 'Something went wrong',
+              icon: 'error'
+          });
+      }
+  });
+}

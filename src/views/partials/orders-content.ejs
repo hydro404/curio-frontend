@@ -14,22 +14,7 @@
     class="d-flex justify-content-between align-items-center pt-lg-2 pb-4 pb-lg-5 mb-lg-3"
   >
     <div class="d-flex align-items-center">
-      <label
-        class="d-none d-lg-block fs-sm text-light text-nowrap opacity-75 me-2"
-        for="order-sort"
-        >Sort orders:</label
-      >
-      <label
-        class="d-lg-none fs-sm text-nowrap opacity-75 me-2"
-        for="order-sort"
-        >Sort orders:</label
-      >
-      <select class="form-select" id="order-sort">
-        <option>All</option>
-        <option>Completed</option>
-        <option>In Progress</option>
-        <option>Cancelled</option>
-      </select>
+      
     </div>
     <button
       class="btn btn-primary btn-sm d-none d-lg-inline-block"
@@ -66,6 +51,8 @@
             <span class="badge bg-info m-0"><%= order.status %></span>
             <% } else if (order.status === 'Completed') { %>
             <span class="badge bg-success m-0"><%= order.status %></span>
+            <% } else if (order.status === 'Processing') { %>
+              <span class="badge bg-primary m-0"><%= order.status %></span>
             <% } else if (order.status === 'Cancelled') { %>
             <span class="badge bg-danger m-0"><%= order.status %></span>
             <% } else { %>
@@ -83,14 +70,14 @@
             <% if (order.status === 'Pending') { %>
             <button
               class="btn btn-outline-danger btn-sm"
-              onclick="cancelOrder(`<%= order.id %>`)"
+              onclick="cancelModal(`<%= order.id %>`)"
             >
               Cancel
             </button>
-            <% } else if(order.status === 'Completed') { %>
+            <% } else if(order.status === 'Processing') { %>
             <button
-              class="btn btn-outline-success btn-sm"
-              onclick="completeOrder(`<%= order.id %>`)"
+              class="btn btn-success btn-sm" style="background-color: rgb(65, 138, 65) !important;"
+              onclick="completeModal(`<%= order.id %>`)"
             >
               Complete
             </button>
@@ -101,6 +88,100 @@
       </tbody>
     </table>
   </div>
+
+
+
+                <div
+                class="modal fade"
+                id="deleteModal"
+                tabindex="-1"
+                aria-labelledby="deleteModal"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="title">
+                        Cancel Order
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      Are you sure that you want to cancel the order with the order number
+                      CURIO<span id="order-number"></span>?
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="confirm-delete"
+                      >
+                        Proceed
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="modal fade"
+                id="authorizeModal"
+                tabindex="-1"
+                aria-labelledby="authorizeModal"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="title2">
+                        Authorize Order
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      Are you sure that you want to complete the order with the order number
+                      CURIO<span id="order-number2"></span>?
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-success"
+                        id="confirm-authorize"
+                        style="background-color: rgb(32, 156, 32) !important;"
+                      >
+                        Authorize
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              
   <!-- Pagination-->
   <nav class="d-flex justify-content-between pt-2" aria-label="Page navigation">
     <ul class="pagination">

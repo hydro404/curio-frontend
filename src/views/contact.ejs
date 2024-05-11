@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%- title %></title>
+    <link rel="stylesheet" href="/css/theme.min.css" />
+    <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
+    <link
+      rel="stylesheet"
+      media="screen"
+      href="/vendor/simplebar/dist/simplebar.min.css"
+    />
+    <link
+      rel="stylesheet"
+      media="screen"
+      href="/vendor/tiny-slider/dist/tiny-slider.css"
+    />
+
+    <style>
+      .fab {
+        position: fixed;
+        bottom: 60px;
+        right: 20px;
+        border: none;
+        outline: none;
+        background-color: #007bff;
+        color: white;
+        font-size: 16px;
+        padding: 15px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      .fab i {
+        font-family: FontAwesome;
+      }
+
+      .message-container {
+        position: fixed;
+        bottom: 20px;
+        right: calc(20px); /* Positioned off-screen initially */
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        display: none; /* Initially hidden */
+        transition: all 0.3s ease; /* Add transition for smooth animation */
+      }
+
+      .message-container.active {
+        display: block;
+        right: 0px;
+        bottom: 90px; /* Animate to center on click */
+        transition: all 0.3s ease;
+        height: 600px;
+        width: 400px;
+        z-index: 400;
+      }
+
+      .close-btn {
+        background-color: transparent;
+        border: none;
+        color: #007bff;
+        cursor: pointer;
+      }
+
+      .chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .chat-history {
+        padding: 10px;
+        height: calc(
+          100% - 60px
+        ); /* Allocate space for header, input, and history */
+        overflow-y: scroll; /* Enable scrolling for long chat history */
+      }
+
+      .chat-input {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+      }
+
+      .chat-input input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+      }
+
+      .send-btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="icon" type="image/png" href="/img/icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/icon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/icon.png" />
+  </head>
+  <body class="handheld-toolbar-enabled">
+    <%- include('partials/sign-in-modal') %>
+    <main class="page-wrapper">
+      <header class="shadow-sm"><%-include('partials/header') %></header>
+      <section>
+        <section class="container-fluid pt-grid-gutter">
+            <div class="row">
+              <div class="col-xl-3 col-sm-6 mb-grid-gutter"><a class="card h-100" href="#map" data-scroll>
+                  <div class="card-body text-center"><i class="ci-location h3 mt-2 mb-4 text-primary"></i>
+                    <h3 class="h6 mb-2">Main store address</h3>
+                    <p class="fs-sm text-muted">Old Albay District, Legazpi City, Albay</p>
+                  </div></a></div>
+              <div class="col-xl-3 col-sm-6 mb-grid-gutter">
+                <div class="card h-100">
+                  <div class="card-body text-center"><i class="ci-time h3 mt-2 mb-4 text-primary"></i>
+                    <h3 class="h6 mb-3">Working hours</h3>
+                    <ul class="list-unstyled fs-sm text-muted mb-0">
+                      <li>Mon - Fri: 8AM - 5PM</li>
+                      <li class="mb-0">Sat: 10AM - 4PM</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 mb-grid-gutter">
+                <div class="card h-100">
+                  <div class="card-body text-center"><i class="ci-phone h3 mt-2 mb-4 text-primary"></i>
+                    <h3 class="h6 mb-3">Phone numbers</h3>
+                    <ul class="list-unstyled fs-sm mb-0">
+                      <li><span class="text-muted me-1">For customers:</span><a class="nav-link-style" href="tel:+108044357260">+639 123456789</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 mb-grid-gutter">
+                <div class="card h-100">
+                  <div class="card-body text-center"><i class="ci-mail h3 mt-2 mb-4 text-primary"></i>
+                    <h3 class="h6 mb-3">Email addresses</h3>
+                    <ul class="list-unstyled fs-sm mb-0">
+                      <li><span class="text-muted me-1">For customers:</span><a class="nav-link-style" href="mailto:+108044357260">curio4552@gmail.com</a></li>
+                      <li class="mb-0"><span class="text-muted me-1">Tech support:</span><a class="nav-link-style" href="mailto:support@example.com">support.curio4552@gmail.com</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="col-lg-6 px-4 px-xl-5 py-5 border-top">
+                <h2 class="h4 mb-4">Drop us a line</h2>
+                <form class="needs-validation mb-3" novalidate action="mailto:curio4552@gmail.com" method="post">
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                    <label class="form-label" for="cf-name">Your name:&nbsp;<span class="text-danger">*</span></label>
+                    <input class="form-control" type="text" id="cf-name" placeholder="John Doe" required>
+                    <div class="invalid-feedback">Please fill in you name!</div>
+                    </div>
+                    <div class="col-sm-6">
+                    <label class="form-label" for="cf-email">Email address:&nbsp;<span class="text-danger">*</span></label>
+                    <input class="form-control" type="email" id="cf-email" placeholder="johndoe@email.com" required>
+                    <div class="invalid-feedback">Please provide valid email address!</div>
+                    </div>
+                    <div class="col-sm-6">
+                    <label class="form-label" for="cf-phone">Your phone:&nbsp;<span class="text-danger">*</span></label>
+                    <input class="form-control" type="text" id="cf-phone" placeholder="+639123456789" required>
+                    <div class="invalid-feedback">Please provide valid phone number!</div>
+                    </div>
+                    <div class="col-sm-6">
+                    <label class="form-label" for="cf-subject">Subject:</label>
+                    <input class="form-control" type="text" id="cf-subject" placeholder="Provide short title of your request">
+                    </div>
+                    <div class="col-12">
+                    <label class="form-label" for="cf-message">Message:&nbsp;<span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="cf-message" rows="6" placeholder="Please describe in detail your request" required></textarea>
+                    <div class="invalid-feedback">Please write a message!</div>
+                    <button class="btn btn-primary mt-4" type="submit">Send message</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <%- include('partials/footer', {categories: categories, totalProducts:
+      totalProducts}) %>
+    </footer>
+    <!-- Vendor scrits: js libraries and plugins-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/simplebar/dist/simplebar.min.js"></script>
+    <script src="vendor/tiny-slider/dist/min/tiny-slider.js"></script>
+    <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+    <script src="vendor/drift-zoom/dist/Drift.min.js"></script>
+    <script src="js/auth.js"></script>
+    <!-- Main theme script-->
+    <script src="js/theme.min.js"></script>
+
+    <button class="fab">
+      <i class="fas fa-message"></i>
+    </button>
+
+    <div class="message-container">
+      <div class="chat-header">
+        <h2>New Message</h2>
+        <button class="close-btn">Close</button>
+      </div>
+      <div class="chat-history"></div>
+      <div class="chat-input">
+        <input type="text" placeholder="Type your message" />
+        <button class="send-btn">Send</button>
+      </div>
+    </div>
+
+    <script>
+      const fabButton = document.querySelector(".fab");
+      const messageContainer = document.querySelector(".message-container");
+      const closeButton = document.querySelector(".close-btn");
+      const chatHistory = document.querySelector(".chat-history");
+      const chatInput = document.querySelector(".chat-input input");
+      const sendButton = document.querySelector(".send-btn");
+
+      fabButton.addEventListener("click", () => {
+        messageContainer.classList.toggle("active");
+      });
+
+      closeButton.addEventListener("click", () => {
+        messageContainer.classList.remove("active");
+      });
+
+      // Simulate adding a message to chat history (replace with actual logic)
+      sendButton.addEventListener("click", () => {
+        const message = chatInput.value;
+
+        // https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=
+        // post
+
+        var settings = {
+          url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent?key=AIzaSyBY9yc9TuAF174rbLjiu37FBLp-PGipNf8",
+          method: "POST",
+          timeout: 0,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: JSON.stringify({
+            contents: [
+              {
+                parts: [
+                  {
+                    text: "input: How to order",
+                  },
+                  {
+                    text: "output: Hello, thanks for visiting Curio 4552! You can visit our product catalog and checkout the items. Is there anything I can help you?",
+                  },
+                  {
+                    text: "input: Hello",
+                  },
+                  {
+                    text: "output: Hello, thanks for visiting Curio 4552! How may I help you?",
+                  },
+                  {
+                    text: "input: About your shop",
+                  },
+                  {
+                    text: "output: Hello there. Curio 4552 is established to exhibit and sell Albay-made souvenirs to support local workers in the province.",
+                  },
+                  {
+                    text: "input: Hi",
+                  },
+                  {
+                    text: "output: Hello, thanks for visiting Curio 4552! How may I help you?",
+                  },
+                  {
+                    text: "input: "+ message,
+                  },
+                  {
+                    text: "output: ",
+                  },
+                ],
+              },
+            ],
+            generationConfig: {
+              temperature: 0.9,
+              topK: 0,
+              topP: 1,
+              maxOutputTokens: 2048,
+              stopSequences: [],
+            },
+            safetySettings: [
+              {
+                category: "HARM_CATEGORY_HARASSMENT",
+                threshold: "BLOCK_MEDIUM_AND_ABOVE",
+              },
+              {
+                category: "HARM_CATEGORY_HATE_SPEECH",
+                threshold: "BLOCK_MEDIUM_AND_ABOVE",
+              },
+              {
+                category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                threshold: "BLOCK_MEDIUM_AND_ABOVE",
+              },
+              {
+                category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                threshold: "BLOCK_MEDIUM_AND_ABOVE",
+              },
+            ],
+          }),
+        };
+
+        $.ajax(settings).done(function (response) {
+          console.log(response.candidates[0].content.parts[0].text);
+          const message = response.candidates[0].content.parts[0].text;
+          const newMessage = document.createElement("p");
+          newMessage.innerText = message;
+          chatHistory.appendChild(newMessage);
+          chatInput.value = ""; /* Clear input field after sending */
+          chatHistory.scrollTop =
+            chatHistory.scrollHeight; /* Scroll to bottom after adding message */
+        });
+        if (message.trim() !== "") {
+          const newMessage = document.createElement("p");
+          newMessage.innerText = message;
+          chatHistory.appendChild(newMessage);
+          chatInput.value = ""; /* Clear input field after sending */
+          chatHistory.scrollTop =
+            chatHistory.scrollHeight; /* Scroll to bottom after adding message */
+        }
+      });
+    </script>
+  </body>
+</html>
