@@ -214,11 +214,15 @@ router.post("/updateProduct", (req, res) => {
         stock: stock,
       },
       {
-        headers: { authorization: `${cookieData}` },
+        headers: { Authorization: `${cookieData}` },
       }
     )
     .then((response) => {
-      res.redirect("/admin-update");
+      // res.redirect("/admin-update");
+      res.status(200).json({
+        status: "success",
+        message: "Product updated successfully",
+      });
     })
     .catch((error) => {
       console.log(error);
@@ -493,19 +497,26 @@ router.get("/admin-update", getUserDetailsMiddleware, (req, res) => {
 
 
 router.get("/manage-orders", getUserDetailsMiddleware, getAdminDetailsMiddleware, (req, res) => {
+  var cookieData = req.cookies.token;
   try {
     const page = parseInt(req.query.page) || 1; // Current page, default is 1
     const pageSize = 100; // Number of items per page
     // const product_category = req.query.product_category; // Retrieve product-category value from request
     const totalPages = 1;
-    res.render("admin-orders", {
-      title: "Admin | Curio 4552",
-      products: res.locals.products,
-      paginatedProducts: res.locals.products,
-      page: page,
-      totalPages: totalPages,
-      categories: res.locals.categories,
-      product_category: res.locals.categories,
+    axios.get(`${serverURL}/admin/orders`, { headers: { Authorization: `${cookieData}` },}
+    ).then((response) => {
+      const orders = response.data;
+      console.log(orders);
+      res.render("admin-orders", {
+        title: "Admin | Curio 4552",
+        orders: orders,
+        paginatedOrders: res.locals.paginatedProducts,
+        paginatedProducts: res.locals.products,
+        page: page,
+        totalPages: totalPages,
+        categories: res.locals.categories,
+        product_category: res.locals.categories,
+      });
       paginatedOrders: res.locals.orders
     });
   } catch (error) {
