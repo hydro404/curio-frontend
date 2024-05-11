@@ -167,7 +167,7 @@
                       </h1>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="/updateProduct" method="post">
+                    <form id="form-update-product">
                       <input type="hidden" name="id" id="product-id">
                       <div class="modal-body">
                         <div class="mb-3">
@@ -179,14 +179,14 @@
                         <div class="mb-3">
                           <label for="select-category" class="form-label">Category</label>
                           <select class="form-select" id="select-category" name="category">
-                            <!-- POPULATE MO TO BASED SA DATABASE -->
-                            <option id="product-category"></option>
-                            <% categories.sort((a, b)=> { if (a === 'Accessories'
-                              || a === 'Others') return 1; if (b === 'Accessories'
-                              || b === 'Others') return -1; return 0; });
-                              categories.forEach(category => { %>
-                              <option value="<%- category.name %>"><%- category.name%></option>
-                              <% }); %>
+                            <!-- SKIP the FIRST ELEMENT IN categories-->
+                            <%
+                            categories.forEach((category, index) => {
+                                if (index !== 0) { %>
+                                    <option value="<%- category.name %>"><%- category.name%></option>
+                            <% }
+                            }); %>
+
                           </select>
                         </div>
 
@@ -301,6 +301,8 @@
       <footer><%-include('partials/admin-footer') %></footer>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <!-- Vendor scrits: js libraries and plugins-->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
       integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
@@ -311,6 +313,7 @@
     <script src="vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
     <!-- Main theme script-->
     <script src="js/theme.min.js"></script>
+    <script src="js/modifyProducts.js"></script>
 </body>
 
 </html>
