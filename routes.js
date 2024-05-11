@@ -170,7 +170,7 @@ router.put("/updateCart", cartController.updateCart);
 router.post("/checkout", cartController.checkoutCart);
 
 router.post("/loginAdmin", userController.loginAdmin);
-router.post("/addProduct", adminController.addProduct);
+router.post("/addProduct",upload.array('images', 3), adminController.addProduct);
 
 // update product
 router.post("/updateProduct", (req, res) => {
