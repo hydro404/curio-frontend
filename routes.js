@@ -466,4 +466,27 @@ router.get("/admin-update", getUserDetailsMiddleware, (req, res) => {
   }
 });
 
+
+router.get("/manage-orders", getUserDetailsMiddleware, (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1; // Current page, default is 1
+    const pageSize = 100; // Number of items per page
+    // const product_category = req.query.product_category; // Retrieve product-category value from request
+    const totalPages = 1;
+    res.render("admin-orders", {
+      title: "Admin | Curio 4552",
+      products: res.locals.products,
+      paginatedProducts: res.locals.products,
+      page: page,
+      totalPages: totalPages,
+      categories: res.locals.categories,
+      product_category: res.locals.categories,
+    });
+  } catch (error) {
+    // If there's an error, return an error response
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 module.exports = router;

@@ -193,7 +193,7 @@ if(signinForm){
                         timer: 1500,
                         willClose: () => {
                             setTimeout(() => {
-                                window.location.href = "/admin-add-product";
+                                window.location.href = "/dashboard";
                             }, 100);
                         }
                     });
