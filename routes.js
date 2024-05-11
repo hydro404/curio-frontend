@@ -516,8 +516,9 @@ router.get("/manage-orders", getUserDetailsMiddleware, getAdminDetailsMiddleware
         totalPages: totalPages,
         categories: res.locals.categories,
         product_category: res.locals.categories,
+        paginatedOrders: res.locals.orders
       });
-      paginatedOrders: res.locals.orders
+      
     });
   } catch (error) {
     // If there's an error, return an error response
