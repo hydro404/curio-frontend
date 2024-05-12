@@ -29,6 +29,27 @@ function seeOrder(object){
         `;
         $('#order-modal-body').append(product);
     });
+    
+    $("#order-modal-body").append(`
+    <div class="row">
+        <h5 class="mt-4">Shipping Address</h5>
+        <div class="col-md-6">
+            <p><strong>Firstname:</strong> ${id.firstname}</p>
+            <p><strong>Email:</strong> ${id.email}</p>
+            <p><strong>Address 1:</strong> ${id.address1}</p>
+            <p><strong>City:</strong> ${id.city}</p>
+            <p><strong>Zipcode:</strong> ${id.zipcode}</p>
+            <p><strong>Payment:</strong> ${id.payment}</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Lastname:</strong> ${id.lastname}</p>
+            <p><strong>Phone:</strong> ${id.phone}</p>
+            <p><strong>Address 2: ${id.address2}</strong></p>
+            <p><strong>Province:</strong> ${id.province}</p>
+            <p><strong>Courier:</strong> ${id.courier}</p>
+        </div>
+    </div>
+`);
     $('#order-details').modal('show');
 }
 

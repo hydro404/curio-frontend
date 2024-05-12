@@ -1,72 +1,70 @@
-
-function authorizeOrder(id, status){
-    $.ajax({
-        url: '/approveCancelOrder',
-        type: 'PUT',
-        data: {id, status},
-        success: function(result){
-            if(result.status === 'success'){
-                Swal.fire ({
-                    title: 'Order Accepted!',
-                    icon: 'success',
-                    timer: 1500,
-                }).then(() => {
-                    window.location.reload();
-                });
-            }
-        },
-        error: function(error){
-            console.log(error);
-            Swal.fire({
-                title: 'Something went wrong',
-                icon: 'error'
-            });
-        }
-    });
+function authorizeOrder(id, status) {
+  $.ajax({
+    url: "/approveCancelOrder",
+    type: "PUT",
+    data: { id, status },
+    success: function (result) {
+      if (result.status === "success") {
+        Swal.fire({
+          title: "Order Accepted!",
+          icon: "success",
+          timer: 1500,
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+    },
+    error: function (error) {
+      console.log(error);
+      Swal.fire({
+        title: "Something went wrong",
+        icon: "error",
+      });
+    },
+  });
 }
 
-
-function cancelOrder(id, status){
-    $.ajax({
-        url: '/approveCancelOrder',
-        type: 'PUT',
-        data: {id, status},
-        success: function(result){
-            if(result.status === 'success'){
-                Swal.fire ({
-                    title: 'Order Cancelled',
-                    icon: 'success',
-                    timer: 1500,
-                }).then(() => {
-                    window.location.reload();
-                });
-            }
-        },
-        error: function(error){
-            console.log(error);
-            Swal.fire({
-                title: 'Something went wrong',
-                icon: 'error'
-            });
-        }
-    });
+function cancelOrder(id, status) {
+  $.ajax({
+    url: "/approveCancelOrder",
+    type: "PUT",
+    data: { id, status },
+    success: function (result) {
+      if (result.status === "success") {
+        Swal.fire({
+          title: "Order Cancelled",
+          icon: "success",
+          timer: 1500,
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+    },
+    error: function (error) {
+      console.log(error);
+      Swal.fire({
+        title: "Something went wrong",
+        icon: "error",
+      });
+    },
+  });
 }
 
-function seeOrder(object){
-    console.log(JSON.parse(object));
-    $('#order-modal-body').text('');
-    var id = JSON.parse(object);
-    console.log(id.total);
-    var subtotal = parseInt(id.total) - 60;
-    console.log(subtotal);
-    $('#subtotalModal').text('₱'+ subtotal );
-    $('#shippingModal').text("₱60.00");
-    $('#totalModal').text('₱' + id.total)
+function seeOrder(object) {
+  console.log(JSON.parse(object));
+  $("#order-modal-body").text("");
+  var id = JSON.parse(object);
+  console.log(id.total);
+  var subtotal = parseInt(id.total) - 60;
+  console.log(subtotal);
+  $("#subtotalModal").text("₱" + subtotal);
+  $("#shippingModal").text("₱60.00");
+  $("#totalModal").text("₱" + id.total);
 
-    id.items.forEach(function(item){
-        var total = (parseInt(item.price) * parseInt(item.quantity)) + 60;
-        var subtotal2 = parseInt(total) - 60;
-        var product = `
+  id.items.forEach(function (item) {
+    var total = parseInt(item.price) * parseInt(item.quantity) + 60;
+    var subtotal2 = parseInt(total) - 60;
+    var product = `
         <div class="d-sm-flex justify-content-between mb-4 pb-3 pb-sm-2 border-bottom">
                 <div class="d-sm-flex text-center text-sm-start">
                   <div class="ps-sm-4 pt-2">
@@ -83,7 +81,29 @@ function seeOrder(object){
                 </div>
         </div>
         `;
-        $('#order-modal-body').append(product);
-    });
-    $('#order-details').modal('show');
+    $("#order-modal-body").append(product);
+  });
+
+  $("#order-modal-body").append(`
+    <div class="row">
+        <h5 class="mt-4">Shipping Address</h5>
+        <div class="col-md-6">
+            <p><strong>Firstname:</strong> ${id.firstname}</p>
+            <p><strong>Email:</strong> ${id.email}</p>
+            <p><strong>Address 1:</strong> ${id.address1}</p>
+            <p><strong>City:</strong> ${id.city}</p>
+            <p><strong>Zipcode:</strong> ${id.zipcode}</p>
+            <p><strong>Payment:</strong> ${id.payment}</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Lastname:</strong> ${id.lastname}</p>
+            <p><strong>Phone:</strong> ${id.phone}</p>
+            <p><strong>Address 2: ${id.address2}</strong></p>
+            <p><strong>Province:</strong> ${id.province}</p>
+            <p><strong>Courier:</strong> ${id.courier}</p>
+        </div>
+    </div>
+`);
+
+  $("#order-details").modal("show");
 }
